@@ -1,0 +1,4 @@
+*.sublime-*
+vendor/
+composer.lock 
+config/parameters.ini
