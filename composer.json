@@ -16,9 +16,12 @@
         "Guzzle/Guzzle" : "3.8.0",
         "twig/twig" : "1.15.0"
     },
+    "require-dev" : {
+        "phpunit/phpunit": "*"
+    },
     "autoload" : {
         "psr-0" : {
-            "Cloudson/Phartitura" : "src\/"
+            "Cloudson\\Phartitura" : "src\/"
         }
     }
 }
