@@ -1,6 +1,6 @@
 <?php 
 
-namespace Cloudson\Phartitura\Composer;
+namespace Cloudson\Phartitura\Packagist;
 
 use Cloudson\Phartitura\Curl\ClientAdapter;
 

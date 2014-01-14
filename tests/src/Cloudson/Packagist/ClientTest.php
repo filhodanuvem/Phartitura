@@ -1,6 +1,6 @@
 <?php
 
-namespace Cloudson\Phartitura\Composer; 
+namespace Cloudson\Phartitura\Packagist; 
 
 
 class ClientTest extends \PHPUnit_Framework_TestCase
@@ -49,7 +49,6 @@ class MockResponseOKAdapter implements \Cloudson\Phartitura\Curl\ResponseAdapter
     public function getHeaderInfo($info){}
 }
 
-// Help, please! 
 class MockResponseNotOKAdapter implements \Cloudson\Phartitura\Curl\ResponseAdapter
 {
     public function getStatusCode()
