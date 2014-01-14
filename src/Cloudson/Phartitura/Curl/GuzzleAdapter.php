@@ -5,6 +5,7 @@ namespace Cloudson\Phartitura\Curl;
 class GuzzleAdapter implements ClientAdapter
 {
     private $c; 
+    private $isSecure;
 
     public function __construct(Guzzle $guzzle)
     {
@@ -18,5 +19,14 @@ class GuzzleAdapter implements ClientAdapter
         $response = $request->send();
 
         return new GuzzleResponseAdapter($response);
+    }
+
+    public function setSecure($isSecure)
+    {
+        if (is_bool($isSecure)) {
+            throw new \InvalidArgumentException("Security may be a boolean");
+        }
+
+        $this->isSecure = $isSecure;
     }
 }

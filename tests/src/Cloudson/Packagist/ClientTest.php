@@ -35,6 +35,43 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $c = new Client($curlClient);
         $c->ping();   
     }
+
+    public function should_ping_a_repository()
+    {
+        $response = new MockResponseOKAdapter; 
+        $curlClient = $this->getMock('Cloudson\Phartitura\Curl\ClientAdapter');
+        $curlClient->expects($this->once())
+            ->method('head')
+            ->will($this->returnValue($response));
+
+        $c = new Client($curlClient);
+        $c->ping('/cloudson/oliveira');
+    }
+
+    /**
+    * @test
+    * @dataProvider returnInvalidPackageNames
+    * @expectedException \InvalidArgumentException
+    */ 
+    public function should_throw_error_when_ping_with_invalid_package_names($packageName)
+    {
+        $response = new MockResponseOKAdapter; 
+        $curlClient = $this->getMock('Cloudson\Phartitura\Curl\ClientAdapter');
+        
+        $c = new Client($curlClient);
+        $c->ping($packageName);
+    }
+
+    public function returnInvalidPackageNames()
+    {
+        return [
+            ['cloudson'],
+            [[]],
+            [true],
+            [42],
+            ['juca/'],
+        ];
+    }
 }
 
 // Help, please! 
