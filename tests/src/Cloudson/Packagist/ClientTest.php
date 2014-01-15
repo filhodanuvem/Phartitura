@@ -45,7 +45,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($response));
 
         $c = new Client($curlClient);
-        $c->ping('/cloudson/oliveira');
+        $c->ping('cloudson/oliveira');
     }
 
     /**
