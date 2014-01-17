@@ -8,9 +8,14 @@ class Version
 
     private $valueString;
 
-    public function __construct($valueString)
+    private $createdAt;
+
+    public function __construct($valueString, \DateTime $createdAt = null)
     {
         $this->valueString = $valueString;
+        if ($createdAt) {
+            $this->setCreatedAt($createdAt);
+        }
     }
 
     public function isSemVer()
@@ -40,4 +45,19 @@ class Version
 
         return $matches;
     }
+
+    public function setCreatedAt(\DateTime $createdAt)
+    {
+        $today = new \DateTime('now');
+        if ($createdAt >  $today) {
+            throw new \OutOfRangeException(
+                sprintf("Impossible had version %s after now " , $createdAt->format('Y-m-d H:i:s'))
+            );
+            
+        }
+
+        $this->createdAt = $createdAt;
+    }
+
+    
 }
