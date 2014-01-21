@@ -9,7 +9,7 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
     */ 
     public function should_returns_zero_dependencies()
     {
-        $project  = new Project('cloudson/foo'); 
+        $project  = new Project('cloudson/foo', new Version('5.42.3')); 
         $dependencies = $project->getDependencies();
 
         $this->assertTrue(count($dependencies) === 0);
@@ -26,10 +26,10 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
             'guzzle/guzzle',
         ];
 
-        $project = new Project('cloudson/bar');
-        $project->addDependency(new Project($projectNames[0]));
-        $project->addDependency(new Project($projectNames[1]));
-        $project->addDependency(new Project($projectNames[2]));
+        $project = new Project('cloudson/bar', new Version('5.42.3'));
+        $project->addDependency(new Project($projectNames[0], new Version('5.42.3')));
+        $project->addDependency(new Project($projectNames[1], new Version('5.42.3')));
+        $project->addDependency(new Project($projectNames[2], new Version('5.42.3')));
 
         $dependencies = $project->getDependencies();
         $this->assertTrue(count($dependencies) === 3);
@@ -50,10 +50,10 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
             'guzzle/guzzle',
         ];
 
-        $project = new Project('cloudson/bar');
-        $project->addDependency(new Project($projectNames[0]));
-        $project->addDependency(new Project($projectNames[1]));
-        $project->addDependency(new Project($projectNames[2]));
+        $project = new Project('cloudson/bar', new Version('5.42.3'));
+        $project->addDependency(new Project($projectNames[0], new Version('5.42.3')));
+        $project->addDependency(new Project($projectNames[1], new Version('5.42.3')));
+        $project->addDependency(new Project($projectNames[2], new Version('5.42.3')));
 
         $this->assertTrue(count($project) === 3);
 

@@ -59,5 +59,9 @@ class Version
         $this->createdAt = $createdAt;
     }
 
+    public function __toString()
+    {
+        return $this->valueString;
+    }
     
 }

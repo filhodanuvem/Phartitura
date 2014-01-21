@@ -48,7 +48,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
         $v->setCreatedAt(new \DateTime('+1day'));
     }
 
-
+    
     public function get_versions_using_semver()
     {
         return [

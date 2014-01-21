@@ -4,13 +4,17 @@ namespace Cloudson\Phartitura\Project;
 
 class Project implements \IteratorAggregate, \Countable 
 {
-    private  $name; 
-    private  $dependencies; 
+    private $name; 
 
-    public function __construct($name)
+    private $dependencies;
+
+    private $currentVersion; 
+
+    public function __construct($name, Version $version)
     {
         $this->setName($name);
         $this->dependencies = [];  
+        $this->currentVersion = $version;
     }
 
     public function getDependencies()
