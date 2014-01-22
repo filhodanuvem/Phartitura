@@ -39,6 +39,21 @@ class Project implements \IteratorAggregate, \Countable
         return $this->name;
     }
 
+    public function getVersion()
+    {
+        return $this->currentVersion;
+    }
+
+    public function getDependency($name)
+    {
+        foreach ($this->dependencies as $dependency) {
+            if ($dependency->getName() == $name) {
+                return $dependency;
+            }
+        }
+        return null;
+    }
+
     public function getIterator()
     {
         return $this->getDependencies();

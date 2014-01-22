@@ -14,25 +14,27 @@ class Client
     }
 
 
-    public function ping($packageName = '')
+    public function ping($projectName = '')
     {
         
-        if (!is_string($packageName)) {
+        if (!is_string($projectName)) {
             throw new \InvalidArgumentException(sprintf(
-                'Package %s is not valid', gettype($packageName) 
+                'Package %s is not valid', gettype($projectName) 
             ));
         }
 
-        if ($packageName && !preg_match('/[a-zA-Z0-9_-]+\/[a-zA-Z0-9_-]+/', $packageName)) {
+        if ($projectName && !preg_match('/^[a-zA-Z0-9_-]+\/[a-zA-Z0-9_-]+$/', $projectName)) {
             throw new \InvalidArgumentException(sprintf(
-                'Package %s is not valid', $packageName 
+                'Package %s is not valid', $projectName 
             ));
         }
         
         $response = $this->c->head();
         $statusCode = $response->getStatusCode();
-        if ($statusCode >= 500 and $statusCode < 600) {
-            throw new \UnexpectedValueException;
+        if (($statusCode >= 500 and $statusCode < 600) || $statusCode == 404) {
+            throw new \UnexpectedValueException(sprintf(
+                $response->getBody()
+            ));
         }
 
         return $statusCode;
