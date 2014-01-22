@@ -13,12 +13,17 @@ class Comparator
     {
         $diff = array();
 
+        if ($actual->getName() != $newest->getName()) {
+            throw new \InvalidArgumentException(
+                sprintf("Projects are not same, '%s' and '%s' found", $actual->getName(), $newest->getName())
+            );
+        }
 
         foreach ($actual as $dependency) {
-            $diff['dependencies'][$dependency->getName()] = [ (string)$dependency->getVersion() => '' ];
+            $diff['dependencies'][$dependency->getName()] =  new VersionDiff($dependency->getVersion(), null);
             $dependencyNewest = $newest->getDependency($dependency->getName());
             if ($dependencyNewest) {
-                $diff['dependencies'][$dependency->getName()] = [ (string)$dependency->getVersion() => (string)$dependencyNewest->getVersion() ];
+                $diff['dependencies'][$dependency->getName()] = new VersionDiff($dependency->getVersion() , $dependencyNewest->getVersion());
             } 
         }
 
