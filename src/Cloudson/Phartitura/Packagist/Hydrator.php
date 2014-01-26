@@ -39,9 +39,16 @@ class Hydrator implements HydratorProjectInterface
         $project->setName($projectMetadaData['name']);
         $project->setDescription($projectMetadaData['description']);
 
+        $this->hydrateVersion($projectMetadaData['versions'], $project);
+
+        return $project;
+    }
+
+    private function hydrateVersion($versions, $project)
+    {
         // we want ordering versions by datetime desc, excluding no tags using semver
         $versionsByPriority = new \SplPriorityQueue;
-        foreach ($projectMetadaData['versions'] as $versionString => $version) {
+        foreach ($versions as $versionString => $version) {
             if (!preg_match(Version::PATTERN_SEMVER, $versionString)) {
                 continue;
             }
@@ -72,8 +79,6 @@ class Hydrator implements HydratorProjectInterface
         }
 
         $project->setVersion($versionFound);
-
-        return $project;
     }
 
     public function setVersion(Version $version)
