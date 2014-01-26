@@ -4,8 +4,8 @@ namespace Cloudson\Phartitura\Packagist;
 
 use Cloudson\Phartitura\HydratorProjectInterface;
 use Cloudson\Phartitura\Project\Project;
-use Cloudson\Phartitura\Project\Version;
-use Cloudson\Phartitura\Project\Comparator;
+use Cloudson\Phartitura\Project\Version\Version;
+use Cloudson\Phartitura\Project\Version\Comparator;
 use Cloudson\Phartitura\Project\Exception\VersionNotFoundException;
 
 class Hydrator implements HydratorProjectInterface

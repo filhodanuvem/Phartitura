@@ -1,6 +1,6 @@
 <?php
 
-namespace Cloudson\Phartitura\Project; 
+namespace Cloudson\Phartitura\Project\Version; 
 
 class VersionDiffTest extends \PHPUnit_Framework_TestCase
 {

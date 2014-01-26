@@ -1,6 +1,8 @@
 <?php
 
-namespace Cloudson\Phartitura\Project;
+namespace Cloudson\Phartitura\Project\Version;
+
+use Cloudson\Phartitura\Project\Project;
 
 class Comparator
 {

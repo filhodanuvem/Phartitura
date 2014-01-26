@@ -5,8 +5,8 @@ namespace Cloudson\Phartitura\Packagist;
 use Cloudson\Phartitura\Curl\ClientAdapter;
 use Cloudson\Phartitura\ClientProjectInterface;
 use Cloudson\Phartitura\Project\Project;
-use Cloudson\Phartitura\Project\Version;
-use Cloudson\Phartitura\Project\Comparator;
+use Cloudson\Phartitura\Project\Version\Version;
+use Cloudson\Phartitura\Project\Version\Comparator;
 
 class Client implements ClientProjectInterface
 {

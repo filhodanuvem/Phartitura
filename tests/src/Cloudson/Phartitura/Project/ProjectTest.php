@@ -2,6 +2,8 @@
 
 namespace Cloudson\Phartitura\Project; 
 
+use Cloudson\Phartitura\Project\Version\Version; 
+
 class ProjectTest extends \PHPUnit_Framework_TestCase
 {
     /**

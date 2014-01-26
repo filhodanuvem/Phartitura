@@ -2,6 +2,8 @@
 
 namespace Cloudson\Phartitura\Project; 
 
+use Cloudson\Phartitura\Project\Version\Version;
+
 class Project implements \IteratorAggregate, \Countable 
 {
     private $name; 
