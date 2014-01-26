@@ -17,7 +17,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($response));
 
         $c = new Client($curlClient);
-        $c->ping();
+        $c->ping('cloudson/gandalf');
     }
 
     /**
@@ -33,7 +33,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($response));
 
         $c = new Client($curlClient);
-        $c->ping();   
+        $c->ping('cloudson/whatever');   
     }
 
     public function should_ping_a_repository()
@@ -76,6 +76,23 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Cloudson\\Phartitura\\Project\\Project', $project);
         $this->assertEquals('cloudson/gandalf', $project->getName());
     }
+
+    /**
+    * @test
+    */ 
+    public function should_returns_a_project_on_version()
+    {
+        $response = new MockResponseOKAdapter;
+        $curlClient = $this->getMock('Cloudson\Phartitura\Curl\ClientAdapter');
+
+        $c = new Client($curlClient);
+        $project = $c->getProject('cloudson/gandalf', '0.7.0');
+
+        $this->assertEquals('cloudson/gandalf', $project->getName());
+        $this->assertEquals('0.7.0', (string)$project->getVersion());
+    }
+
+    // @todo test url generations
 
     public function returnInvalidPackageNames()
     {

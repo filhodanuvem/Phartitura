@@ -2,6 +2,8 @@
 
 namespace Cloudson\Phartitura\Curl;
 
+use \Guzzle\Http\Client as Guzzle;
+
 class GuzzleAdapter implements ClientAdapter
 {
     private $c; 
@@ -13,9 +15,9 @@ class GuzzleAdapter implements ClientAdapter
     }
 
 
-    public function head()
+    public function head($relativeURI)
     {
-        $request = $c->head('/');
+        $request = $this->c->head($relativeURI);
         $response = $request->send();
 
         return new GuzzleResponseAdapter($response);
@@ -28,5 +30,18 @@ class GuzzleAdapter implements ClientAdapter
         }
 
         $this->isSecure = $isSecure;
+    }
+
+    public function isSecure()
+    {
+        return $this->isSecure;
+    }
+
+    public function get($relativeURI)
+    {
+        $request = $this->c->get($relativeURI);
+        $response = $request->send();
+
+        return new GuzzleResponseAdapter($response);
     }
 }

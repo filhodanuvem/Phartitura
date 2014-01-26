@@ -16,17 +16,18 @@ class GuzzleResponseAdapter implements ResponseAdapter
 
     public function getStatusCode()
     {
-        return $this->getHeaderInfo('statusCode');
+        return $this->response->getStatusCode();
     }
 
     public function getHeaderInfo($key)
     {
-        $response->getInfo($key);
+
+        $this->response->getInfo($key);
     }
 
     public function getHeader()
     {
-        return $this->getRawHeaders();
+        return $this->response->getRawHeaders();
     }
 
     public function getBody()

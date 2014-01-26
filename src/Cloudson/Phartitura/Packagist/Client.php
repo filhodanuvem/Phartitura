@@ -10,6 +10,10 @@ use Cloudson\Phartitura\Project\Version;
 class Client implements ClientProjectInterface
 {
     private $c; 
+
+    const BASE = 'packagist.org';
+
+    const RELATIVE_URL_PROJECT = '/packages/%s.json';
     
     public function __construct(ClientAdapter $c)
     {
@@ -17,7 +21,7 @@ class Client implements ClientProjectInterface
     }
 
 
-    public function ping($projectName = '')
+    public function ping($projectName)
     {
         
         if (!is_string($projectName)) {
@@ -32,7 +36,7 @@ class Client implements ClientProjectInterface
             ));
         }
         
-        $response = $this->c->head();
+        $response = $this->c->head($this->getUrlPRoject($projectName));
         $statusCode = $response->getStatusCode();
         if (($statusCode >= 500 and $statusCode < 600) || $statusCode == 404) {
             throw new \UnexpectedValueException(sprintf(
@@ -43,8 +47,21 @@ class Client implements ClientProjectInterface
         return $statusCode;
     }
 
-    public function getProject($name)
+    public function getProject($name, $versionString = '0.7.0')
     {
-        return new Project($name, new Version('0.0.1'));
+        $response = $this->c->get($this->getUrlPRoject($name));
+
+        // $p = new Project('undefined/undefined', new Version('0.0.0'));
+        // // change to DI
+        // $h = new Hydrator;
+        // $h->hydrate(json_decode($response->getBody(), true), $p);
+
+        return new Project($name, new Version($versionString));
+        // return $p;
+    }
+
+    private function getUrlPRoject($name)
+    {      
+        return sprintf(self::RELATIVE_URL_PROJECT, $name);
     }
 }

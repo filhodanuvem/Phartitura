@@ -5,9 +5,22 @@ namespace Cloudson\Phartitura\Packagist;
 use Cloudson\Phartitura\HydratorProjectInterface;
 use Cloudson\Phartitura\Project\Project;
 use Cloudson\Phartitura\Project\Version;
+use Cloudson\Phartitura\Project\Comparator;
+use Cloudson\Phartitura\Project\Exception\VersionNotFoundException;
 
 class Hydrator implements HydratorProjectInterface
 {
+    private $comparator; 
+
+    private $versionToFind;
+
+    public function __construct(Comparator $comparator, Version $version = null)
+    {
+        $this->comparator = $comparator;
+
+        $this->versionToFind = $version;
+    }
+
     public function hydrate($data, Project $project)
     {
         if (!is_array($data)) {
@@ -35,7 +48,40 @@ class Hydrator implements HydratorProjectInterface
             $versionsByPriority->insert($version, (new \DateTime($version['time']))->getTimestamp());
         }
 
-        $latestVersion = $versionsByPriority->current()['version'];
-        $project->setVersion(new Version($latestVersion));
+        $latestVersion = new Version($versionsByPriority->current()['version']);
+        if (!$this->versionToFind) {
+            $project->setVersion($latestVersion);
+
+            return $project;
+        }
+
+        $versionFound = null;
+        foreach ($versionsByPriority as $version) {
+            $versionCurrent = new Version($version['version']);
+            if ($this->comparator->isEqual($this->versionToFind, $versionCurrent)) {
+                $versionFound = $versionCurrent;
+                break;
+            }
+        }    
+        
+        if (!$versionFound) {
+            throw new VersionNotFoundException(
+                sprintf('Version "%s" not found', $versionFound)
+            );
+        }
+
+        $project->setVersion($versionFound);
+
+        return $project;
+    }
+
+    public function setVersion(Version $version)
+    {
+        $this->versionToFind = $version;
+    }
+
+    public function getVersion()
+    {
+        return $this->versionToFind;
     }
 }

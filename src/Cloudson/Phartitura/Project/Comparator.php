@@ -29,4 +29,6 @@ class Comparator
 
         return $diff;
     }
+
+    // @todo function updateIsRecomended : using semver to discover if some bugfix was commited
 }
