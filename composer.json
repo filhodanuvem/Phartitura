@@ -4,7 +4,8 @@
     "authors" : [
         {
             "name" : "Claudson Oliveira",
-            "email" : "claudsonweb@gmail.com"
+            "email" : "claudsonweb@gmail.com",
+            "homepage" : "http://cloudson.github.io"
         }
     ],
     "license" : "",
