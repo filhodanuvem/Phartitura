@@ -3,8 +3,11 @@
 namespace Cloudson\Phartitura\Packagist;
 
 use Cloudson\Phartitura\Curl\ClientAdapter;
+use Cloudson\Phartitura\ClientProjectInterface;
+use Cloudson\Phartitura\Project\Project;
+use Cloudson\Phartitura\Project\Version;
 
-class Client
+class Client implements ClientProjectInterface
 {
     private $c; 
     
@@ -38,5 +41,10 @@ class Client
         }
 
         return $statusCode;
+    }
+
+    public function getProject($name)
+    {
+        return new Project($name, new Version('0.0.1'));
     }
 }

@@ -8,13 +8,15 @@ class Project implements \IteratorAggregate, \Countable
 
     private $dependencies;
 
-    private $currentVersion; 
+    private $version; 
+
+    private $description;
 
     public function __construct($name, Version $version)
     {
         $this->setName($name);
         $this->dependencies = [];  
-        $this->currentVersion = $version;
+        $this->version = $version;
     }
 
     public function getDependencies()
@@ -39,9 +41,24 @@ class Project implements \IteratorAggregate, \Countable
         return $this->name;
     }
 
+    public function setVersion(Version $version)
+    {
+        $this->version = $version;
+    }
+
     public function getVersion()
     {
-        return $this->currentVersion;
+        return $this->version;
+    }
+
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     public function getDependency($name)

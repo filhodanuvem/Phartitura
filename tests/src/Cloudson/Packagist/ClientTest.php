@@ -62,6 +62,21 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $c->ping($packageName);
     }
 
+    /**
+    * @test
+    */ 
+    public function should_returns_a_project_instance()
+    {
+        $response = new MockResponseOKAdapter; 
+        $curlClient = $this->getMock('Cloudson\Phartitura\Curl\ClientAdapter');
+        
+        $c = new Client($curlClient);
+        $project = $c->getProject('cloudson/gandalf');
+
+        $this->assertInstanceOf('Cloudson\\Phartitura\\Project\\Project', $project);
+        $this->assertEquals('cloudson/gandalf', $project->getName());
+    }
+
     public function returnInvalidPackageNames()
     {
         return [
