@@ -6,7 +6,7 @@ class Comparator
 {
     public function isEqual(Version $v1, Version $v2)
     {
-        return $v1 == $v2;
+        return (string)$v1 == (string)$v2;
     }
 
     public function diff(Project $actual, Project $newest)

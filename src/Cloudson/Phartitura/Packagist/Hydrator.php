@@ -48,7 +48,8 @@ class Hydrator implements HydratorProjectInterface
             $versionsByPriority->insert($version, (new \DateTime($version['time']))->getTimestamp());
         }
 
-        $latestVersion = new Version($versionsByPriority->current()['version']);
+        $latestVersionData = $versionsByPriority->current();
+        $latestVersion = new Version($latestVersionData['version'], new \DateTime($latestVersionData['time']));
         if (!$this->versionToFind) {
             $project->setVersion($latestVersion);
 
@@ -57,7 +58,7 @@ class Hydrator implements HydratorProjectInterface
 
         $versionFound = null;
         foreach ($versionsByPriority as $version) {
-            $versionCurrent = new Version($version['version']);
+            $versionCurrent = new Version($version['version'], new \DateTime($version['time']));
             if ($this->comparator->isEqual($this->versionToFind, $versionCurrent)) {
                 $versionFound = $versionCurrent;
                 break;
@@ -66,7 +67,7 @@ class Hydrator implements HydratorProjectInterface
         
         if (!$versionFound) {
             throw new VersionNotFoundException(
-                sprintf('Version "%s" not found', $versionFound)
+                sprintf('Version "%s" not found', $this->versionToFind)
             );
         }
 
