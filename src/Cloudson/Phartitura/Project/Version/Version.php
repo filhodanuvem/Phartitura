@@ -12,7 +12,7 @@ class Version
 
     public function __construct($valueString, \DateTime $createdAt = null)
     {
-        $this->valueString = $valueString;
+        $this->valueString = str_replace(' ', '', $valueString);
         if ($createdAt) {
             $this->setCreatedAt($createdAt);
         }
