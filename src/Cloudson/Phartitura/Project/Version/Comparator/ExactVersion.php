@@ -1,0 +1,21 @@
+<?php
+
+namespace Cloudson\Phartitura\Project\Version\Comparator;
+
+use Cloudson\Phartitura\Project\Version\ComparatorStrategyInterface;
+use Cloudson\Phartitura\Project\Version\Version;
+
+class ExactVersion implements ComparatorStrategyInterface
+{
+    private $next;
+
+    public function compare(Version $versionCurrent, Version $versionRule)
+    {
+        if (!preg_match(Version::PATTERN_SEMVER, $versionCurrent) || !preg_match(Version::PATTERN_SEMVER, $versionRule)) {
+
+            return false;
+        }
+
+        return (string) $versionCurrent == (string) $versionRule;
+    }
+}
