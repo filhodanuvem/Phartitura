@@ -9,7 +9,7 @@ class WildCardVersion implements ComparatorStrategyInterface
 {
     private $next;
 
-    public function compare(Version $versionCurrent, Version $versionRule)
+    public function compare(Version $versionCurrent, $versionRule)
     {
         if (!$versionCurrent->isSemver()) {
             return false;
@@ -18,7 +18,7 @@ class WildCardVersion implements ComparatorStrategyInterface
         $rule = trim($versionRule); 
         $rule = str_replace('.', '\.', $rule);
 
-        if (!preg_match(sprintf('/%s/', $rule), (string)$versionCurrent)) {
+        if (!preg_match(sprintf('/%s/', $rule), $versionCurrent)) {
             return false;
         }
 

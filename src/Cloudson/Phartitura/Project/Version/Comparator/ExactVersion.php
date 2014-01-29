@@ -9,13 +9,13 @@ class ExactVersion implements ComparatorStrategyInterface
 {
     private $next;
 
-    public function compare(Version $versionCurrent, Version $versionRule)
+    public function compare(Version $versionCurrent, $versionRule)
     {
         if (!preg_match(Version::PATTERN_SEMVER, $versionCurrent) || !preg_match(Version::PATTERN_SEMVER, $versionRule)) {
 
             return false;
         }
 
-        return (string) $versionCurrent == (string) $versionRule;
+        return (string) $versionCurrent ==  $versionRule;
     }
 }
