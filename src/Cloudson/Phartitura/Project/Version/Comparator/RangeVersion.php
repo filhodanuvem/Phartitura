@@ -8,7 +8,7 @@ use Cloudson\Phartitura\Project\Version\Version;
 class RangeVersion implements ComparatorStrategyInterface
 {
 
-    const PATTERN = '/^(>|>=|<|<=)([0-9]+(\.[0-9]+){0,2})(,(>|>=|<|<=)([0-9]+(\.[0-9]+){0,1})){0,2}$/';
+    const PATTERN = '/^(>|>=|<|<=)([0-9]+(\.[0-9]+){0,2})(,(>|>=|<|<=)([0-9]+(\.[0-9]+){0,2})){0,2}$/';
     const T_GREATER = '>';
     const T_GREATER_EQUAL = '>=';
     const T_LESS = '<';
