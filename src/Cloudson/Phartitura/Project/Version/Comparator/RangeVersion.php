@@ -8,11 +8,12 @@ use Cloudson\Phartitura\Project\Version\Version;
 class RangeVersion implements ComparatorStrategyInterface
 {
 
-    const PATTERN = '/^(>|>=|<|<=)([0-9]+(\.[0-9]+){0,2})(,(>|>=|<|<=)([0-9]+(\.[0-9]+){0,2})){0,2}$/';
+    const PATTERN = '/^(>|>=|<|<=)([0-9]+(\.[0-9]+){0,2})(,(>|>=|<|<=)([0-9]+(\.[0-9]+){0,2})){0,1}$/';
     const T_GREATER = '>';
     const T_GREATER_EQUAL = '>=';
     const T_LESS = '<';
     const T_LESS_EQUAL = '<=';
+
 
     public static $compareMethods = [
         self::T_GREATER => 'compareGreater',
@@ -23,9 +24,7 @@ class RangeVersion implements ComparatorStrategyInterface
 
     private function parse($source)
     {
-        $source = str_replace(' ', '', $source);
         $matches = array();
-        
         preg_match_all(self::PATTERN, $source, $matches);
         if (!$matches || !$matches[0]) {
             return array();
@@ -41,6 +40,11 @@ class RangeVersion implements ComparatorStrategyInterface
 
     public function compare(Version $versionCurrent, $versionRule)
     {
+        $versionRule = str_replace(' ', '', $versionRule);
+        if (!preg_match(self::PATTERN, $versionRule)) {
+            return false;
+        }
+
         $lexemes = $this->parse($versionRule);
         if (!$lexemes) {
 
@@ -83,4 +87,5 @@ class RangeVersion implements ComparatorStrategyInterface
     {
         return version_compare((string) $version, $versionLimit)  <= 0 ;
     }
+
 }

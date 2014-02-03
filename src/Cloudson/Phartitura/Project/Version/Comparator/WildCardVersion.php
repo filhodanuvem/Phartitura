@@ -7,7 +7,6 @@ use Cloudson\Phartitura\Project\Version\Version;
 
 class WildCardVersion implements ComparatorStrategyInterface
 {
-    private $next;
 
     public function compare(Version $versionCurrent, $versionRule)
     {

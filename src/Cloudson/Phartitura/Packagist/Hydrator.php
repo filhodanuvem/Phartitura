@@ -5,20 +5,20 @@ namespace Cloudson\Phartitura\Packagist;
 use Cloudson\Phartitura\HydratorProjectInterface;
 use Cloudson\Phartitura\Project\Project;
 use Cloudson\Phartitura\Project\Version\Version;
-use Cloudson\Phartitura\Project\Version\Comparator;
+use Cloudson\Phartitura\Project\Version\ComparatorStrategyInterface;
 use Cloudson\Phartitura\Project\Exception\VersionNotFoundException;
 
 class Hydrator implements HydratorProjectInterface
 {
     private $comparator; 
 
-    private $versionToFind;
+    private $versionRule;
 
-    public function __construct(Comparator $comparator, Version $version = null)
+    public function __construct(ComparatorStrategyInterface $comparator, $versionRule = null)
     {
         $this->comparator = $comparator;
 
-        $this->versionToFind = $version;
+        $this->versionRule = $versionRule;
     }
 
     public function hydrate($data, Project $project)
@@ -55,39 +55,27 @@ class Hydrator implements HydratorProjectInterface
             $versionsByPriority->insert($version, (new \DateTime($version['time']))->getTimestamp());
         }
 
-        $latestVersionData = $versionsByPriority->current();
-        $latestVersion = new Version($latestVersionData['version'], new \DateTime($latestVersionData['time']));
-        if (!$this->versionToFind) {
-            $project->setVersion($latestVersion);
-
-            return $project;
-        }
-
-        $versionFound = null;
         foreach ($versionsByPriority as $version) {
-            $versionCurrent = new Version($version['version'], new \DateTime($version['time']));
-            if ($this->comparator->isEqual($this->versionToFind, $versionCurrent)) {
-                $versionFound = $versionCurrent;
-                break;
+            $currentVersion = new Version($version['version']);
+            if (!$this->versionRule || $this->comparator->compare($currentVersion, $this->versionRule)) {
+                $project->setVersion($currentVersion);
+                return;        
             }
-        }    
-        
-        if (!$versionFound) {
-            throw new VersionNotFoundException(
-                sprintf('Version "%s" not found', $this->versionToFind)
-            );
         }
 
-        $project->setVersion($versionFound);
+        throw new VersionNotFoundException(sprintf(
+            'Version with pattern "%s" not found', $this->versionRule
+        ));
+        
     }
 
     public function setVersion(Version $version)
     {
-        $this->versionToFind = $version;
+        $this->versionRule = $version;
     }
 
     public function getVersion()
     {
-        return $this->versionToFind;
+        return $this->versionRule;
     }
 }

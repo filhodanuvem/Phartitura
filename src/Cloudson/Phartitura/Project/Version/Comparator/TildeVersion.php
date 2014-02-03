@@ -11,10 +11,12 @@ class TildeVersion implements ComparatorStrategyInterface
 
     const PATTERN = '/~([0-9]+)(\.([0-9]+)){0,1}(\.([0-9])+){0,1}/';
 
-
-
     public function compare(Version $versionCurrent, $versionRule)
     {
+        if (!preg_match(self::PATTERN, $versionRule)) {
+            return false;
+        }
+
         $converted = $this->convertToRange($versionRule);
 
         $tildeVersion = new RangeVersion;
@@ -37,4 +39,5 @@ class TildeVersion implements ComparatorStrategyInterface
 
         return sprintf(">=%d.%s.%s,<%d.%s.0", $major, $minor, $patch, $major, $minor + 1); 
     }
+
 }

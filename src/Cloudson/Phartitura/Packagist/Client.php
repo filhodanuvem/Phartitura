@@ -6,7 +6,7 @@ use Cloudson\Phartitura\Curl\ClientAdapter;
 use Cloudson\Phartitura\ClientProjectInterface;
 use Cloudson\Phartitura\Project\Project;
 use Cloudson\Phartitura\Project\Version\Version;
-use Cloudson\Phartitura\Project\Version\Comparator;
+use Cloudson\Phartitura\Project\Version\Comparator\ExactVersion;
 
 class Client implements ClientProjectInterface
 {
@@ -57,7 +57,7 @@ class Client implements ClientProjectInterface
         $response = $this->c->get($this->getUrlPRoject($name));
         $p = new Project('undefined/undefined', new Version('0.0.0'));
         // change to DI
-        $h = new Hydrator(new Comparator, $versionToFind);
+        $h = new Hydrator(new ExactVersion, $versionToFind);
         $h->hydrate(json_decode($response->getBody(), true), $p);
         
         return $p;

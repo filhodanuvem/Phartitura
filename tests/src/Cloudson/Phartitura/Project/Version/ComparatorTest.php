@@ -6,17 +6,6 @@ use Cloudson\Phartitura\Project\Project;
 
 class ComparatorTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-    * @test
-    */ 
-    public function should_check_if_versions_are_equals()
-    {
-        $v1 = new Version('4.2.30');
-        $v2 = new Version('4.2.30');
-
-        $comparator = new Comparator;
-        $this->assertTrue($comparator->isEqual($v1, $v2));
-    }
 
     /**
     * @test

@@ -3,12 +3,27 @@
 namespace Cloudson\Phartitura\Project\Version;
 
 use Cloudson\Phartitura\Project\Project;
+use Cloudson\Phartitura\Project\Version\Version;
+use Cloudson\Phartitura\Project\Version\ComparatorStrategyInterface;
 
-class Comparator
+class Comparator implements ComparatorStrategyInterface
 {
-    public function isEqual(Version $v1, Version $v2)
+    private $comparators = array();
+
+    public function compare(Version $version, $versionRule)
     {
-        return (string)$v1 == (string)$v2;
+        foreach ($this->comparators as $comparator) {
+            if ($comparator->compare($version, $versionRule)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function addComparator(ComparatorStrategyInterface $comparator)
+    {
+        $this->comparators[] = $comparator; 
     }
 
     public function diff(Project $actual, Project $newest)

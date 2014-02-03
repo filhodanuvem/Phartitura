@@ -7,7 +7,6 @@ use Cloudson\Phartitura\Project\Version\Version;
 
 class ExactVersion implements ComparatorStrategyInterface
 {
-    private $next;
 
     public function compare(Version $versionCurrent, $versionRule)
     {
