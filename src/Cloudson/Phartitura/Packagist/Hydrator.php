@@ -69,12 +69,12 @@ class Hydrator implements HydratorProjectInterface
         
     }
 
-    public function setVersion(Version $version)
+    public function setVersionRule($version)
     {
         $this->versionRule = $version;
     }
 
-    public function getVersion()
+    public function getVersionRule()
     {
         return $this->versionRule;
     }

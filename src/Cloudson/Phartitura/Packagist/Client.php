@@ -12,13 +12,16 @@ class Client implements ClientProjectInterface
 {
     private $c; 
 
+    private $hydrator; 
+
     const BASE = 'packagist.org';
 
     const RELATIVE_URL_PROJECT = '/packages/%s.json';
     
-    public function __construct(ClientAdapter $c)
+    public function __construct(ClientAdapter $c, Hydrator $hydrator)
     {
         $this->c = $c;
+        $this->hydrator = $hydrator;
     }
 
 
@@ -48,17 +51,12 @@ class Client implements ClientProjectInterface
         return $statusCode;
     }
 
-    public function getProject($name, $versionString = null)
+    public function getProject($name, $versionRulestring = null)
     {
-        $versionToFind = null;
-        if ($versionString) {
-            $versionToFind = new Version($versionString);
-        }
         $response = $this->c->get($this->getUrlPRoject($name));
         $p = new Project('undefined/undefined', new Version('0.0.0'));
-        // change to DI
-        $h = new Hydrator(new ExactVersion, $versionToFind);
-        $h->hydrate(json_decode($response->getBody(), true), $p);
+        $this->hydrator->setVersionRule($versionRulestring);
+        $this->hydrator->hydrate(json_decode($response->getBody(), true), $p);
         
         return $p;
     }

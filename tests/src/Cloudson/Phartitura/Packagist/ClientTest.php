@@ -2,6 +2,7 @@
 
 namespace Cloudson\Phartitura\Packagist; 
 
+use Cloudson\Phartitura\Project\Version\Comparator\ExactVersion; 
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,7 +17,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->method('head')
             ->will($this->returnValue($response));
 
-        $c = new Client($curlClient);
+        $h = new Hydrator(new ExactVersion);
+
+        $c = new Client($curlClient, $h);
         $c->ping('cloudson/gandalf');
     }
 
@@ -32,7 +35,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->method('head')
             ->will($this->returnValue($response));
 
-        $c = new Client($curlClient);
+        $h = new Hydrator(new ExactVersion);
+
+        $c = new Client($curlClient, $h);
         $c->ping('cloudson/whatever');   
     }
 
@@ -44,7 +49,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->method('head')
             ->will($this->returnValue($response));
 
-        $c = new Client($curlClient);
+        $h = new Hydrator(new ExactVersion);
+
+        $c = new Client($curlClient, $h);
         $c->ping('cloudson/oliveira');
     }
 
@@ -58,7 +65,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $response = new MockResponseOKAdapter; 
         $curlClient = $this->getMock('Cloudson\Phartitura\Curl\ClientAdapter');
         
-        $c = new Client($curlClient);
+        $h = new Hydrator(new ExactVersion);
+
+        $c = new Client($curlClient, $h);
         $c->ping($packageName);
     }
 
@@ -74,7 +83,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValue($response));
         
-        $c = new Client($curlClient);
+        $h = new Hydrator(new ExactVersion);
+
+        $c = new Client($curlClient, $h);
         $project = $c->getProject('cloudson/gandalf');
 
         $this->assertInstanceOf('Cloudson\\Phartitura\\Project\\Project', $project);
@@ -93,7 +104,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValue($response));
 
-        $c = new Client($curlClient);
+        $h = new Hydrator(new ExactVersion);
+
+        $c = new Client($curlClient, $h);
         $project = $c->getProject('cloudson/gandalf', '0.7.0');
 
         $this->assertEquals('cloudson/gandalf', $project->getName());
