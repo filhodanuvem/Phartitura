@@ -84,7 +84,7 @@ class HydratorTest extends \PHPUnit_Framework_TestCase
 
         $project = new Project\Project('undefined/undefined', new Project\Version\Version('0.0.0'));
 
-        $hydrator = new Hydrator(new Project\Version\Comparator\ExactVersion);
+        $hydrator = new Hydrator(new Project\Version\Comparator\WildCardVersion, '*');
         $hydrator->hydrate($json, $project);
 
         $this->assertEquals('1.40.0', (string)$project->getVersion());
@@ -171,11 +171,65 @@ class HydratorTest extends \PHPUnit_Framework_TestCase
 
     /**
     * @test
-    * @dataProvider getRulesAndFounds
+    * @dataProvider getRulesAndFoundsUnilateral
     */ 
     public function should_hydrate_a_project_using_unilateral_range($rule, $expected)
     {
-        $json = [
+        $json = $this->getJson();
+        $project = new Project\Project('undefined/undefined', new Project\Version\Version('0.0.0'));
+
+        $comparator = new Project\Version\Comparator;
+        $comparator->addComparator(new Project\Version\Comparator\ExactVersion);
+        $comparator->addComparator(new Project\Version\Comparator\TildeVersion);
+        $comparator->addComparator(new Project\Version\Comparator\RangeVersion);
+
+        $hydrator = new Hydrator($comparator, $rule);
+        $hydrator->hydrate($json, $project);
+
+        $this->assertEquals($expected, (string)$project->getVersion());
+
+    }
+
+    public function getRulesAndFoundsUnilateral() 
+    {
+        return [
+            ['>=0.2.0', '3.3.0'],
+            ['< 0.2.0','0.0.1']
+        ];  
+    }
+
+    /**
+    * @test
+    * @dataProvider getRulesAndFoundsBilateral
+    */ 
+    public function should_hydrate_a_project_using_bilateral_range($rule, $expected)
+    {
+        $json = $this->getJson();
+        $project = new Project\Project('undefined/undefined', new Project\Version\Version('0.0.0'));
+
+        $comparator = new Project\Version\Comparator;
+        $comparator->addComparator(new Project\Version\Comparator\ExactVersion);
+        $comparator->addComparator(new Project\Version\Comparator\TildeVersion);
+        $comparator->addComparator(new Project\Version\Comparator\RangeVersion);
+
+        $hydrator = new Hydrator($comparator, $rule);
+        $hydrator->hydrate($json, $project);
+
+        $this->assertEquals($expected, (string)$project->getVersion());
+    }
+
+    public function getRulesAndFoundsBilateral()
+    {
+        return [
+            ['>=0.0.1, <0.1.0', '0.0.1'],
+            ['>0.0.1, <5.0.0', '3.3.0'],
+            ['>0.0.1, <3.0.0', '0.2.0'],
+        ];
+    }
+
+    private function getJson()
+    {
+        return [
             'package' => [
                 'name' => 'cloudson/phartitura',
                 'description' => 'A crazy php library that handles functions',
@@ -201,26 +255,6 @@ class HydratorTest extends \PHPUnit_Framework_TestCase
                 ],
             ]
         ];
-        $project = new Project\Project('undefined/undefined', new Project\Version\Version('0.0.0'));
-
-        $comparator = new Project\Version\Comparator;
-        $comparator->addComparator(new Project\Version\Comparator\ExactVersion);
-        $comparator->addComparator(new Project\Version\Comparator\TildeVersion);
-        $comparator->addComparator(new Project\Version\Comparator\RangeVersion);
-
-        $hydrator = new Hydrator($comparator, $rule);
-        $hydrator->hydrate($json, $project);
-
-        $this->assertEquals($expected, (string)$project->getVersion());
-
-    }
-
-    public function getRulesAndFounds() 
-    {
-        return [
-            ['>=0.2.0', '3.3.0'],
-            ['0.0.1','0.0.1']
-        ];  
     }
 
 }

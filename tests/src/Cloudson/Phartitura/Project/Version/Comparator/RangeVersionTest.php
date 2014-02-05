@@ -26,11 +26,11 @@ class RangeVersionTest extends \PHPUnit_Framework_TestCase
     public function getRules()
     {
         return [
-            ['>1.0', [RangeVersion::T_GREATER, '1.0', null, null]],
-            ['>=1.0', [RangeVersion::T_GREATER_EQUAL, '1.0', null, null]],
-            ['>=1.0,<3', [RangeVersion::T_GREATER_EQUAL, '1.0', RangeVersion::T_LESS, '3']],
-            ['>=3.2.3,<3.3', [RangeVersion::T_GREATER_EQUAL, '3.2.3', RangeVersion::T_LESS, '3.3']],
-            ['>=3.0.3,<=4.0.2', [RangeVersion::T_GREATER_EQUAL, '3.0.3', RangeVersion::T_LESS_EQUAL, '4.0.2']],
+            ['>1.0', [RangeVersion::T_GREATER, '1.0', null, null, null]],
+            ['>=1.0', [RangeVersion::T_GREATER_EQUAL, '1.0', null, null, null]],
+            ['>=1.0,<3', [RangeVersion::T_GREATER_EQUAL, '1.0', RangeVersion::T_OP_AND, RangeVersion::T_LESS, '3']],
+            ['>=3.2.3,<3.3', [RangeVersion::T_GREATER_EQUAL, '3.2.3', RangeVersion::T_OP_AND, RangeVersion::T_LESS, '3.3']],
+            ['>=3.0.3,<=4.0.2', [RangeVersion::T_GREATER_EQUAL, '3.0.3', RangeVersion::T_OP_AND, RangeVersion::T_LESS_EQUAL, '4.0.2']],
         ];
     }
 
@@ -97,6 +97,46 @@ class RangeVersionTest extends \PHPUnit_Framework_TestCase
             [new Version('2.3.1'), '<=2.2'],
             [new Version('2.2'), '>1.2, <2.2'],
             [new Version('3'), '>2,<2.4'],
+        ];
+    }
+
+    /**
+    * @test
+    * @dataProvider getRulesWithNotOperator
+    */ 
+    public function should_test_with_not_operator($version, $rule)
+    {
+        $comparator = new RangeVersion;
+        $found = $comparator->compare($version, $rule);
+
+        $this->assertTrue($found);
+    }
+
+    public function getRulesWithNotOperator()
+    {
+        return [
+            [new Version('2.4'), '!=2.3'],
+            [new Version('5.6.2'), '<5.5 | !=5.8']
+        ];
+    }
+
+    /**
+    * @test
+    * @dataProvider getRulesWithOrOperator
+    */ 
+    public function should_test_with_or_operator($version, $rule)
+    {
+        $comparator = new RangeVersion;
+        $found = $comparator->compare($version, $rule);
+
+        $this->assertTrue($found);
+    }
+
+    public function getRulesWithOrOperator()
+    {
+        return [
+            [new Version('5.3'), '<5.1 | >5.2'],
+            [new Version('5.6.2'), '<5.7 | >5.8']
         ];
     }
 }

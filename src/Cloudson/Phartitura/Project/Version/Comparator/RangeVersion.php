@@ -8,11 +8,14 @@ use Cloudson\Phartitura\Project\Version\Version;
 class RangeVersion implements ComparatorStrategyInterface
 {
 
-    const PATTERN = '/^(>|>=|<|<=)([0-9]+(\.[0-9]+){0,2})(,(>|>=|<|<=)([0-9]+(\.[0-9]+){0,2})){0,1}$/';
+    const PATTERN = '/^(>|>=|<|<=|!=)([0-9]+(\.[0-9]+){0,2})((,|\|)(>|>=|<|<=|!=)([0-9]+(\.[0-9]+){0,2})){0,1}$/';
     const T_GREATER = '>';
     const T_GREATER_EQUAL = '>=';
     const T_LESS = '<';
     const T_LESS_EQUAL = '<=';
+    const T_NOT = '!=';
+    const T_OP_AND = ',';
+    const T_OP_OR = '|';
 
 
     public static $compareMethods = [
@@ -20,6 +23,7 @@ class RangeVersion implements ComparatorStrategyInterface
         self::T_GREATER_EQUAL => 'compareGreaterEqual', 
         self::T_LESS => 'compareLess',
         self::T_LESS_EQUAL => 'compareLessEqual',
+        self::T_NOT => 'compareNot',
     ];
 
     private function parse($source)
@@ -35,6 +39,7 @@ class RangeVersion implements ComparatorStrategyInterface
             $matches[2][0],
             count($matches) > 5 ? $matches[5][0] : null,
             count($matches) > 6 ? $matches[6][0] : null,
+            count($matches) > 7 ? $matches[7][0] : null,
         ];
     }
 
@@ -46,21 +51,25 @@ class RangeVersion implements ComparatorStrategyInterface
         }
 
         $lexemes = $this->parse($versionRule);
-        if (!$lexemes) {
-
-        }
 
         if (array_key_exists($lexemes[0], static::$compareMethods)) {
 
         }
+        $boolOperator = $lexemes[2];
+        unset($lexemes[2]);
+        $lexemes = array_chunk($lexemes, 4)[0];
 
         $result = true;
         for ($i = 0; $i < count($lexemes); $i += 2) {
-            $operator = $lexemes[$i];
-            if (!$operator) {
+            $mathOperator = $lexemes[$i];
+            if (!$mathOperator) {
                 continue;
             }
-            $compareMehod = static::$compareMethods[$operator];    
+            $compareMehod = static::$compareMethods[$mathOperator];    
+            if ($boolOperator == self::T_OP_OR) {
+                $result = $result || $this->$compareMehod($versionCurrent, $lexemes[$i + 1]);
+                continue;
+            }
             $result = $result && $this->$compareMehod($versionCurrent, $lexemes[$i + 1]);
         }
         
@@ -86,6 +95,11 @@ class RangeVersion implements ComparatorStrategyInterface
     private function compareLessEqual(Version $version, $versionLimit) 
     {
         return version_compare((string) $version, $versionLimit)  <= 0 ;
+    }
+
+    private function compareNot(Version $version, $versionLimit)
+    {
+        return version_compare((string) $version, $versionLimit) != 0;
     }
 
 }

@@ -14,6 +14,11 @@ class WildCardVersion implements ComparatorStrategyInterface
             return false;
         }
 
+
+        if ('*' === trim($versionRule)) {
+            return true;
+        }
+
         $rule = trim($versionRule); 
         $rule = str_replace('.', '\.', $rule);
 
