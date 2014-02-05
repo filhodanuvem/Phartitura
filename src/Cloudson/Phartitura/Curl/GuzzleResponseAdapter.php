@@ -7,7 +7,7 @@ use Guzzle\Http\Message\Response as gzResponse;
 class GuzzleResponseAdapter implements ResponseAdapter
 {
 
-    private $respose; 
+    private $response; 
 
     public function __construct(gzResponse $r)
     {
