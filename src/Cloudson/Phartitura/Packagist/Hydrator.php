@@ -47,12 +47,12 @@ class Hydrator implements HydratorProjectInterface
     private function hydrateVersion($versions, $project)
     {
         // we want ordering versions by datetime desc, excluding no tags using semver
-        $versionsByPriority = new \SplPriorityQueue;
+        $versionsByPriority = new \Cloudson\Phartitura\Packagist\VersionHeap;
         foreach ($versions as $versionString => $version) {
             if (!preg_match(Version::PATTERN_SEMVER, $versionString)) {
                 continue;
             }
-            $versionsByPriority->insert($version, (new \DateTime($version['time']))->getTimestamp());
+            $versionsByPriority->insert($version);
         }
 
         foreach ($versionsByPriority as $version) {

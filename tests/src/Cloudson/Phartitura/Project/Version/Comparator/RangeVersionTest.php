@@ -31,6 +31,8 @@ class RangeVersionTest extends \PHPUnit_Framework_TestCase
             ['>=1.0,<3', [RangeVersion::T_GREATER_EQUAL, '1.0', RangeVersion::T_OP_AND, RangeVersion::T_LESS, '3']],
             ['>=3.2.3,<3.3', [RangeVersion::T_GREATER_EQUAL, '3.2.3', RangeVersion::T_OP_AND, RangeVersion::T_LESS, '3.3']],
             ['>=3.0.3,<=4.0.2', [RangeVersion::T_GREATER_EQUAL, '3.0.3', RangeVersion::T_OP_AND, RangeVersion::T_LESS_EQUAL, '4.0.2']],
+            ['>=3.2.3-dev,<3.3', [RangeVersion::T_GREATER_EQUAL, '3.2.3-dev', RangeVersion::T_OP_AND, RangeVersion::T_LESS, '3.3']],
+            ['>=1.2.3,<2.3.0-dev', [RangeVersion::T_GREATER_EQUAL, '1.2.3', RangeVersion::T_OP_AND, RangeVersion::T_LESS, '2.3.0-dev']],
         ];
     }
 

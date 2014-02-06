@@ -51,14 +51,59 @@ class Client implements ClientProjectInterface
         return $statusCode;
     }
 
-    public function getProject($name, $versionRulestring = null)
+    public function getProject($name, $versionRulestring = null, $recursive = true)
     {
-        $response = $this->c->get($this->getUrlPRoject($name));
+        try {
+            $response = $this->c->get($this->getUrlPRoject($name));    
+        } catch (\Exception $e) {
+            return null;
+        }
+        
         $p = new Project('undefined/undefined', new Version('0.0.0'));
         $this->hydrator->setVersionRule($versionRulestring);
-        $this->hydrator->hydrate(json_decode($response->getBody(), true), $p);
+        $json = json_decode($response->getBody(), true)?: [];
+
+        try {
+            $this->hydrator->hydrate($json, $p);    
+        } catch (\BadMethodCallException $e) {
+            return null;
+        }
+
+        $requireJson = $this->getDependenciesFromVersionProject($json, $p->getVersion(), 'require');
+        $this->setDependencies($requireJson, $p, $recursive);
         
+        // $requireJson = $this->getDependenciesFromVersionProject($json, $p->getVersion(), 'require-dev');
+        // $this->setDependencies($requireJson, $p, $recursive);
+
         return $p;
+    }
+
+    private function getDependenciesFromVersionProject($json, Version $version, $requireKey = 'require')
+    {
+        // searching the requirements that version
+        $requireJson = [];
+        foreach ($json['package']['versions'] as $versionFound => $data) {
+            if ((string) new Version($versionFound) == (string)$version) {
+                $requireJson = isset($data[$requireKey])?$data[$requireKey]:[];
+                break;
+            }
+        }
+
+        return $requireJson;
+    }
+
+    private function setDependencies($requireJson, Project $p, $recursive = false)
+    {
+        // do you wanna walk for more one level on the graph ? 
+        if ($recursive) {
+            foreach ($requireJson as $projectName => $version) {
+                $d = $this->getProject($projectName, $version, false);
+                if (null === $d) {
+                    continue;
+                }
+                $p->addDependency($d);
+            }   
+        }
     }
 
     private function getUrlPRoject($name)

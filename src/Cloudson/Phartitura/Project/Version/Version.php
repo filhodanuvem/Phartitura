@@ -4,7 +4,7 @@ namespace Cloudson\Phartitura\Project\Version;
 
 class Version
 {
-    const PATTERN_SEMVER = '/^(v){0,1}([0-9]+)\.([0-9]+)\.([0-9]+)[a-zA-Z]*$/';
+    const PATTERN_SEMVER = '/^(v){0,1}([0-9]+)\.([0-9]+)\.([0-9]+)([a-zA-Z]*|-dev)$/';
 
     private $valueString;
 
@@ -13,6 +13,7 @@ class Version
     public function __construct($valueString, \DateTime $createdAt = null)
     {
         $this->valueString = str_replace(' ', '', $valueString);
+        $this->valueString = preg_replace('/^v(.*)/', '$1', $this->valueString);
         if ($createdAt) {
             $this->setCreatedAt($createdAt);
         }
