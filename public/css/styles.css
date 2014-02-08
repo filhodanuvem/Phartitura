@@ -16,6 +16,22 @@
     margin:0 auto;
 }
 
+.home-impact-phrase {
+    font-size: 22px;
+    color: #428BCA;
+}
+
+.home-projects-example li{
+    list-style: none;
+    margin-bottom: 3px;
+}
+
+.header {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 30px;
+    height: 60px;
+}
+
 .text-center {
     text-align: center;
 }

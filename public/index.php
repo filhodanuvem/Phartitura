@@ -10,10 +10,16 @@ use Cloudson\Phartitura\Routine\Twig as TwigRoutine;
 $c = new Container(__DIR__.'/../config/parameters.ini');
 
 $app = new Router;
+
+$app->get('/', function () {
+    return [
+        '_view' => 'home.html',
+    ];
+});
+
+
 $app->get('/*/*/*', new PackageController);
-$app->get('/', function(){
-    echo 'home!';
-}); 
+
 
 $app->always(
     'Accept',

@@ -14,7 +14,7 @@ class Twig
     public function __invoke($data)
     {
         if (!is_array($data)) {
-            throw new \InvalidArgumentException("Twig renderer only html using array $data");
+            return (string)$data;
         }
 
         if (!isset($data['_view'])) {
