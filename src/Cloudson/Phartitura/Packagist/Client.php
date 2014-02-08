@@ -5,8 +5,11 @@ namespace Cloudson\Phartitura\Packagist;
 use Cloudson\Phartitura\Curl\ClientAdapter;
 use Cloudson\Phartitura\ClientProjectInterface;
 use Cloudson\Phartitura\Project\Project;
+use Cloudson\Phartitura\Project\Dependency;
 use Cloudson\Phartitura\Project\Version\Version;
 use Cloudson\Phartitura\Project\Version\Comparator\ExactVersion;
+use Cloudson\Phartitura\Project\Exception\InvalidNameException;
+use Cloudson\Phartitura\Project\Exception\ProjectNotFoundException;
 
 class Client implements ClientProjectInterface
 {
@@ -41,9 +44,10 @@ class Client implements ClientProjectInterface
         }
         
         $response = $this->c->head($this->getUrlPRoject($projectName));
+        
         $statusCode = $response->getStatusCode();
         if (($statusCode >= 500 and $statusCode < 600) || $statusCode == 404) {
-            throw new \UnexpectedValueException(sprintf(
+            throw new ProjectNotFoundException(sprintf(
                 $response->getBody()
             ));
         }
@@ -53,29 +57,46 @@ class Client implements ClientProjectInterface
 
     public function getProject($name, $versionRulestring = null, $recursive = true)
     {
+        $p = new Project($name, new Version('0.0.0'));
+        $this->ping($name);
         try {
             $response = $this->c->get($this->getUrlPRoject($name));    
         } catch (\Exception $e) {
             return null;
         }
         
-        $p = new Project('undefined/undefined', new Version('0.0.0'));
+        $this->hydrateProject($p, $response, $versionRulestring, $recursive);
+        return $p;
+    }
+
+    public function getDependency($name, $versionRulestring = null, $recursive = true)
+    {
+        $d = new Dependency($name, new Version('0.0.0'));
+        try {
+            $response = $this->c->get($this->getUrlPRoject($name));    
+        } catch (\Exception $e) {
+            return null;
+        }
+        
+        $this->hydrateProject($d, $response, $versionRulestring, $recursive);
+        return $d;
+    }
+
+
+    private function hydrateProject(Project $p, $response, $versionRulestring, $recursive)
+    {
         $this->hydrator->setVersionRule($versionRulestring);
         $json = json_decode($response->getBody(), true)?: [];
 
-        try {
+        // try0 {
             $this->hydrator->hydrate($json, $p);    
-        } catch (\BadMethodCallException $e) {
-            return null;
-        }
+        // } catch (\BadMethodCallException $e) {
+        //     return null;
+        // }
 
         $requireJson = $this->getDependenciesFromVersionProject($json, $p->getVersion(), 'require');
         $this->setDependencies($requireJson, $p, $recursive);
-        
-        // $requireJson = $this->getDependenciesFromVersionProject($json, $p->getVersion(), 'require-dev');
-        // $this->setDependencies($requireJson, $p, $recursive);
-
-        return $p;
+       
     }
 
     private function getDependenciesFromVersionProject($json, Version $version, $requireKey = 'require')
@@ -97,7 +118,13 @@ class Client implements ClientProjectInterface
         // do you wanna walk for more one level on the graph ? 
         if ($recursive) {
             foreach ($requireJson as $projectName => $version) {
-                $d = $this->getProject($projectName, $version, false);
+                try {
+                    $d = $this->getDependency($projectName, $version, false);    
+                } catch (InvalidNameException $e) {
+                    // could be a dependency like "php" or an extension
+                    continue;
+                }
+                
                 if (null === $d) {
                     continue;
                 }

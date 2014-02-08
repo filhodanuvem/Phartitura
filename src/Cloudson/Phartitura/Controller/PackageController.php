@@ -6,6 +6,8 @@ use Respect\Rest\Routable;
 
 use Cloudson\Phartitura\Service\ProjectService;
 use Cloudson\Phartitura\Packagist\Renderer;
+use Cloudson\Phartitura\Project\Exception\ProjectNotFoundException;
+use Cloudson\Phartitura\Project\Exception\VersionNotFoundException;
 
 class PackageController implements Routable
 {
@@ -13,7 +15,20 @@ class PackageController implements Routable
     {   
         
         $service = new ProjectService;
-        $project = $service->getProject($user, $packageName, str_replace('-', '.', $version));
+        try {
+            $project = $service->getProject($user, $packageName, str_replace('-', '.', $version));
+        } catch (ProjectNotFoundException $e) {
+            http_response_code(404);
+            return [
+                '_view' => 'project_404.html',
+                'name' => sprintf('%s/%s', $user, $packageName),
+            ];
+        } catch (VersionNotFoundException $e) {
+            // @todo logger
+            return [
+                '_view' => '500.html',
+            ];
+        }
 
         return [
             '_view' => 'project_view.html',

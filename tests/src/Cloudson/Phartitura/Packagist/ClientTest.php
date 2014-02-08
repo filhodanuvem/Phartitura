@@ -82,6 +82,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $curlClient->expects($this->once())
             ->method('get')
             ->will($this->returnValue($response));
+        $curlClient->expects($this->once())
+            ->method('head')
+            ->will($this->returnValue($response));
         
         $h = new Hydrator(new ExactVersion);
 
@@ -103,6 +106,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $curlClient->expects($this->once())
             ->method('get')
             ->will($this->returnValue($response));
+        $curlClient->expects($this->once())
+            ->method('head')
+            ->will($this->returnValue($response));
 
         $h = new Hydrator(new ExactVersion);
 
@@ -123,6 +129,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $curlClient = $this->getMock('Cloudson\Phartitura\Curl\ClientAdapter');
         $curlClient->expects($this->once())
             ->method('get')
+            ->will($this->returnValue($response));
+        $curlClient->expects($this->once())
+            ->method('head')
             ->will($this->returnValue($response));
 
         $h = new Hydrator(new ExactVersion);

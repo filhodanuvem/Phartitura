@@ -3,6 +3,8 @@
 namespace Cloudson\Phartitura\Curl;
 
 use \Guzzle\Http\Client as Guzzle;
+use \Guzzle\Http\Exception\ClientErrorResponseException;
+use Cloudson\Phartitura\Project\Exception\ProjectNotFoundException;
 
 class GuzzleAdapter implements ClientAdapter
 {
@@ -17,9 +19,13 @@ class GuzzleAdapter implements ClientAdapter
 
     public function head($relativeURI)
     {
-        $request = $this->c->head($relativeURI);
-        $response = $request->send();
-
+        try {
+            $request = $this->c->head($relativeURI);    
+            $response = $request->send();
+        } catch (ClientErrorResponseException $e) {
+            throw new ProjectNotFoundException($e->getMessage());
+        }
+        
         return new GuzzleResponseAdapter($response);
     }
 

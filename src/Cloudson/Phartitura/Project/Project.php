@@ -3,9 +3,12 @@
 namespace Cloudson\Phartitura\Project; 
 
 use Cloudson\Phartitura\Project\Version\Version;
+use Cloudson\Phartitura\Project\Exception\InvalidNameException;
 
 class Project implements \IteratorAggregate, \Countable 
 {
+    const PATTERN_NAME = '/[a-zA-Z0-9_-]\/[a-zA-Z0-9_-]/';
+
     private $name; 
 
     private $dependencies;
@@ -26,13 +29,19 @@ class Project implements \IteratorAggregate, \Countable
         return new \ArrayIterator($this->dependencies);
     }
 
-    public function addDependency(Project $dependency)
+    public function addDependency(Dependency $dependency)
     {
         $this->dependencies[] = $dependency;
     }
 
     public function setName($name)
     {
+        if (!preg_match(self::PATTERN_NAME, $name)) {
+            throw new InvalidNameException(sprintf(
+                "%s should be in the pattern", $name
+            ));
+        }
+
         $this->name = $name;
 
         return $this;

@@ -4,9 +4,12 @@ namespace Cloudson\Phartitura\Packagist;
 
 use Cloudson\Phartitura\HydratorProjectInterface;
 use Cloudson\Phartitura\Project\Project;
+use Cloudson\Phartitura\Project\Dependency;
 use Cloudson\Phartitura\Project\Version\Version;
+use Cloudson\Phartitura\Packagist\VersionHeap;
 use Cloudson\Phartitura\Project\Version\ComparatorStrategyInterface;
 use Cloudson\Phartitura\Project\Exception\VersionNotFoundException;
+use Cloudson\Phartitura\Project\Exception\InvalidDataToHydration;
 
 class Hydrator implements HydratorProjectInterface
 {
@@ -24,15 +27,15 @@ class Hydrator implements HydratorProjectInterface
     public function hydrate($data, Project $project)
     {
         if (!is_array($data)) {
-            throw new \InvalidArgumentException("Expected data as array");
+            throw new InvalidDataToHydration("Expected data as array", InvalidDataToHydration::REASON_NOT_ARRAY);
         }
 
         if (!$data) {
-            throw new \BadMethodCallException("data to hydrate is empty");
+            throw new InvalidDataToHydration("data to hydrate is empty", InvalidDataToHydration::REASON_EMPTY);
         }
 
         if (!array_key_exists('package', $data)) {
-            throw new \InvalidArgumentException("Data is out of format");
+            throw new InvalidDataToHydration("Data is out of format", InvalidDataToHydration::REASON_OUT_OF_FORMAT);
         }
 
         $projectMetadaData = $data['package'];
@@ -47,7 +50,7 @@ class Hydrator implements HydratorProjectInterface
     private function hydrateVersion($versions, $project)
     {
         // we want ordering versions by datetime desc, excluding no tags using semver
-        $versionsByPriority = new \Cloudson\Phartitura\Packagist\VersionHeap;
+        $versionsByPriority = new VersionHeap;
         foreach ($versions as $versionString => $version) {
             if (!preg_match(Version::PATTERN_SEMVER, $versionString)) {
                 continue;
@@ -55,11 +58,17 @@ class Hydrator implements HydratorProjectInterface
             $versionsByPriority->insert($version);
         }
 
+        if ($project instanceof Dependency) {
+            $versionData = $versionsByPriority->current();
+            $project->setVersionRule($this->getVersionRule());
+            $project->setLatestVersion( new Version($versionData['version']) );
+        }
+
         foreach ($versionsByPriority as $version) {
             $currentVersion = new Version($version['version']);
             if (!$this->versionRule || $this->comparator->compare($currentVersion, $this->versionRule)) {
                 $project->setVersion($currentVersion);
-                return;        
+                return;
             }
         }
 
