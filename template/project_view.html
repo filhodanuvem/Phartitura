@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+    <div id="project_table">
+        <h2>{{ project.name }}</h2>
+        <small>{{ project.description }}</small>
+        <div id='dependencies'>
+            <div class='row dependency-head'>
+                <div class='col-md-4'>Dependency</div>
+                <div class='col-md-2'>Rule</div>
+                <div class='col-md-2'>Current</div>
+                <div class='col-md-2'>Latest</div>
+                <div class='col-md-2'>Status</div>
+            </div>
+            {% for dependency in project.dependencies %}
+            <div class='row'>
+                <div class='col-md-4'>{{ dependency.name }}</div>
+                <div class='col-md-2'>~2.0</div>
+                <div class='col-md-2'>{{ dependency.version }}</div>
+                <div class='col-md-2'>3.0</div>
+                <div class='col-md-2'>red</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

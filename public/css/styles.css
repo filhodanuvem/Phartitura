@@ -1,0 +1,7 @@
+.container {
+    max-width: 730px;
+}
+
+.dependency-head > div {
+    color:#428BCA!important;
+}
