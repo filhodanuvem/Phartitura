@@ -8,6 +8,7 @@ web1:
        - zip  
        - session 
    after_build:
+    - "cp config/parameters.ini.template config/parameters.ini"
     - "if [ ! -f composer.phar ]; then curl -s http://getcomposer.org/installer | php; fi; php composer.phar install"
 
 
