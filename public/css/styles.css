@@ -1,9 +1,3 @@
-@media (max-width: 600px) {
-    #logo  small {
-        display: none;
-    }
-}
-
 .container {
     max-width: 730px;
 }

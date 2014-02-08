@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Partitura{% block title %}{% endblock %}</title>
+        <title>Phartitura{% block title %}{% endblock %}</title>
 
         <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="/css/styles.css">
+        <link rel="shortcut icon" href="/css/favicon.ico">
     </head>
     <body>
         <div class='container'>
             <div class="header">
-                <ul class="nav nav-pills pull-right">
+                <ul class="nav nav-pills pull-right hidden-xs">
                   <li class="active"><a href="#">Home</a></li>
                   <li><a href="#">About</a></li>
                   <li><a href="#">Contact</a></li>
                 </ul>
-                <h3 class="text-muted" id='logo'><a href="/">Phartitura</a> <small>Watching your php dependencies</small></h3>
+                <ul class='visible-xs'>
+
+                </ul>
+                <h3 class="text-muted" ><a href="/"><img src="/images/logo1.png" width='48px' height='48px'>Phartitura</a> <small class='hidden-xs'>Watching your php dependencies</small></h3>
             </div>
         {% block main %}{% endblock %}
         <script src="../js/bootstrap.min.js"></script>
