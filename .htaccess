@@ -1,0 +1,1 @@
+RewriteRule ^(.*\.(css|js))$ /public/$1 [L]
