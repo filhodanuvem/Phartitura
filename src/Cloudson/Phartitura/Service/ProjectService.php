@@ -16,7 +16,7 @@ use Cloudson\Phartitura\Curl\GuzzleAdapter;
 class ProjectService 
 {
 
-    private $private; 
+    private $client; 
 
     public function __construct()
     {

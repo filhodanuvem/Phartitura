@@ -125,9 +125,6 @@ class Client implements ClientProjectInterface
                     continue;
                 }
                 
-                if (null === $d) {
-                    continue;
-                }
                 $p->addDependency($d);
             }   
         }
