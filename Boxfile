@@ -1,6 +1,6 @@
 web1: 
    name: phartitura
-   document_root: public/index.php
+   document_root: public/
    php_version: 5.4.14
    php_extensions: 
        - curl 
@@ -8,7 +8,8 @@ web1:
        - zip  
        - session 
    after_build:
-    - "cp config/parameters.ini.template config/parameters.ini"
+    - "ls"
+    - "cp config/parameters.ini.sample config/parameters.ini"
     - "if [ ! -f composer.phar ]; then curl -s http://getcomposer.org/installer | php; fi; php composer.phar install"
 
 
