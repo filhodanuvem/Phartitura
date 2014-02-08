@@ -24,7 +24,7 @@ class PackageController implements Routable
                 'name' => sprintf('%s/%s', $user, $packageName),
             ];
         } catch (VersionNotFoundException $e) {
-            // @todo logger
+            trigger_error($e->getMessage());
             return [
                 '_view' => '500.html',
             ];

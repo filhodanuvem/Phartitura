@@ -5,7 +5,7 @@ namespace Cloudson\Phartitura\Project;
 use Cloudson\Phartitura\Project\Version\Version;
 use Cloudson\Phartitura\Project\Exception\InvalidNameException;
 
-class Project implements \IteratorAggregate, \Countable 
+class Project implements \IteratorAggregate, \Countable, \JsonSerializable
 {
     const PATTERN_NAME = '/[a-zA-Z0-9_-]\/[a-zA-Z0-9_-]/';
 
@@ -91,4 +91,15 @@ class Project implements \IteratorAggregate, \Countable
     {
         return count($this->dependencies);
     }
+
+
+    public function jsonSerialize()
+    {
+        return [
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'version' => (string) $this->getVersion(),
+            'dependencies' => iterator_to_array($this->getDependencies()),
+        ];
+    }   
 }

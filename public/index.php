@@ -6,6 +6,7 @@ use Respect\Rest\Router;
 use Respect\Config\Container;
 use Cloudson\Phartitura\Controller\PackageController; 
 use Cloudson\Phartitura\Routine\Twig as TwigRoutine;
+use Cloudson\Phartitura\Routine\Json as JsonRoutine;
 
 $c = new Container(__DIR__.'/../config/parameters.ini');
 
@@ -25,6 +26,7 @@ $app->always(
     'Accept',
     [
         'text/html' => new TwigRoutine($c->twig),
+        'application/json' => new JsonRoutine,
     ]
 );
 
