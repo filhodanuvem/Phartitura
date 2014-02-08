@@ -10,15 +10,15 @@
                 <div class='col-md-2'>Rule</div>
                 <div class='col-md-2'>Current</div>
                 <div class='col-md-2'>Latest</div>
-                <div class='col-md-2'>Status</div>
+                <div class='col-md-2 text-center'>Status</div>
             </div>
             {% for dependency in project.dependencies %}
             <div class='row'>
                 <div class='col-md-4'>{{ dependency.name }}</div>
-                <div class='col-md-2'>~2.0</div>
+                <div class='col-md-2'>{{ dependency.versionRule }}</div>
                 <div class='col-md-2'>{{ dependency.version }}</div>
-                <div class='col-md-2'>3.0</div>
-                <div class='col-md-2'>red</div>
+                <div class='col-md-2'>{{ dependency.latestVersion }}</div>
+                <div class='col-md-2'><div class='status-square {% if dependency.version == dependency.latestVersion %}green{% else %}red{% endif %}'></div></div>
             </div>
             {% endfor %}
         </div>

@@ -5,3 +5,25 @@
 .dependency-head > div {
     color:#428BCA!important;
 }
+
+#dependencies .row {
+    margin-bottom: 10px;
+}
+
+.status-square {
+    width:  15px;
+    height: 15px;
+    margin:0 auto;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.red {
+    background-color: #D02A1A;
+}
+
+.green {
+    background-color: #84D8AF;
+}
