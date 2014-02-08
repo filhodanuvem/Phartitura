@@ -73,7 +73,7 @@ class Hydrator implements HydratorProjectInterface
         }
 
         throw new VersionNotFoundException(sprintf(
-            'Version with pattern "%s" not found', $this->versionRule
+            'Project %s with range versioning "%s" not found', $project->getName(), $this->versionRule
         ));
         
     }
