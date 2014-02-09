@@ -2,11 +2,15 @@ web1:
    name: phartitura
    document_root: public
    php_version: 5.4.14
+   php_newrelic_loglevel: "verbosedebug"
    php_extensions: 
        - curl 
        - json
        - zip  
        - session 
+       - redis
+   shared_writable_dirs: 
+       -  logs
    after_build:
     - "ls"
     - "cp config/parameters.ini.sample config/parameters.ini"
