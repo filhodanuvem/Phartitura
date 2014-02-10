@@ -15,7 +15,8 @@
         "Respect/Config" : "1.0.1",
         "Respect/Relational" : "0.5.1",
         "Guzzle/Guzzle" : "3.8.0",
-        "twig/twig" : "1.15.0"
+        "twig/twig" : "1.15.0",
+        "monolog/monolog" : "1.7.0"
     },
     "require-dev" : {
         "phpunit/phpunit": "*"
