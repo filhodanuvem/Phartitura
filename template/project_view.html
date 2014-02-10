@@ -4,7 +4,6 @@
 
 {% block main %}
     <div id="project_table">
-
         <h2><small><a href='/' title='back to home'><i class='glyphicon glyphicon-chevron-left'></i></a></small>{{ project.nameCamelCase }} <small>{{ project.version }}</small></h2>
         <small>{{ project.description }}</small>
         <div id='dependencies'>
@@ -17,7 +16,7 @@
             </div>
             {% for dependency in project.dependencies %}
             <div class='row'>
-                <div class='col-md-4 col-xs-4'>{{ dependency.name }}</div>
+                <div class='col-md-4 col-xs-4'>{{ dependency.name }} <a href='/{{dependency.name}}' title='back to home'><i class='glyphicon glyphicon-link'></i></a></div>
                 <div class='col-md-2 col-xs-2'>{{ dependency.versionRule }}</div>
                 <div class='col-md-2 col-xs-2'>{{ dependency.version }}</div>
                 <div class='col-md-2 col-xs-2'>{{ dependency.latestVersion }}</div>
