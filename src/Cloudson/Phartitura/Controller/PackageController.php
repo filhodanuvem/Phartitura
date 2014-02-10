@@ -11,6 +11,13 @@ use Cloudson\Phartitura\Project\Exception\VersionNotFoundException;
 
 class PackageController implements Routable
 {
+    private $container ;
+
+    public function __construct($c)
+    {
+        $this->container = $c;
+    }
+
     public function get($user, $packageName, $version =null)
     {   
         
@@ -18,13 +25,14 @@ class PackageController implements Routable
         try {
             $project = $service->getProject($user, $packageName, str_replace('-', '.', $version));
         } catch (ProjectNotFoundException $e) {
+            $this->container->monolog->notice($e->getMessage());
             http_response_code(404);
             return [
                 '_view' => 'project_404.html',
                 'name' => sprintf('%s/%s', $user, $packageName),
             ];
         } catch (VersionNotFoundException $e) {
-            trigger_error($e->getMessage());
+            $this->container->monolog->error($e->getMessage());
             return [
                 '_view' => '500.html',
             ];

@@ -11,16 +11,27 @@
         <div class='container'>
             <div class="header">
                 <ul class="nav nav-pills pull-right hidden-xs">
-                  <li class="active"><a href="#">Home</a></li>
-                  <li><a href="#">About</a></li>
-                  <li><a href="#">Contact</a></li>
+                  <li {% if _current_url == '/' or _current_url == '' %}class="active"{% endif %}><a href="/">Home</a></li>
+                  <li><a href="http://github.com/cloudson/phartitura" target="_blank">Github</a></li>
+                  <li {% if _current_url == '/about' %}class="active"{% endif %}><a href="/about">About</a></li>
                 </ul>
-                <ul class='visible-xs'>
 
-                </ul>
                 <h3 class="text-muted" ><a href="/"><img src="/images/logo1.png" width='48px' height='48px'>Phartitura</a> <small class='hidden-xs'>Watching your php dependencies</small></h3>
             </div>
         {% block main %}{% endblock %}
+        <div class="footer">
+          <p>
+             Copyright © 2014 Phartitura 
+          </p>
+          <p>
+            <small>Phartitura was completely inspired on <a href="https://david-dm.org/">David</a></small>
+          </p>
+          <p>
+            <small>
+              Narrow jumbotron Design, found <a href="http://getbootstrap.com/examples/jumbotron-narrow/#">here</a>
+            </small>
+          </p>
+        </div>
         <script src="../js/bootstrap.min.js"></script>
         </div>
         <script>
@@ -33,5 +44,5 @@
   ga('send', 'pageview');
 
 </script>
-    </body>
+</body>
 </html>

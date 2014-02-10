@@ -6,14 +6,19 @@
     color:#428BCA!important;
 }
 
+#dependencies {
+    background: url(../images/partitura_background2.png) top center no-repeat;
+}
+
 #dependencies .row {
-    margin-bottom: 10px;
+    border-bottom: 1px solid #428BCA;
+    line-height: 35px;
 }
 
 .status-square {
     width:  15px;
     height: 15px;
-    margin:0 auto;
+    margin:10px auto;
 }
 
 .home-impact-phrase {
@@ -38,8 +43,22 @@
 
 .red {
     background-color: #D02A1A;
+    background-image: linear-gradient(to bottom, #EB6640 0px, #C20B07 100%)
 }
 
 .green {
     background-color: #84D8AF;
+    background-image: linear-gradient(to bottom, #AAE7C1 0px, #25B584 100%)
+}
+
+.footer {
+    clear: both;
+    border-top: 1px solid #E5E5E5;
+    color: #777777;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+#container_404 img {
+    float:left;
 }

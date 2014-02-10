@@ -1,3 +1,4 @@
+; TWIG 
 [twigloader Twig_Loader_Filesystem]
 paths   = ../template
 
@@ -10,3 +11,13 @@ base_template_class = 'Twig_Template'
 loader  = [twigloader]
 options = [twigoptions]
 
+; MONOLOG
+[streamHandler Monolog\Handler\StreamHandler]
+__construct = ["../logs/phartitura.log",]
+
+[newRelicHandler Monolog\Handler\NewRelicHandler]
+
+[monolog Monolog\Logger]
+name = phartitura
+pushHandler[] = [streamHandler]
+; pushHandler[] = [newRelicHandler]

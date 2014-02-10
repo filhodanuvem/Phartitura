@@ -18,14 +18,26 @@ $app->get('/', function () {
     ];
 });
 
+$app->get('/about', function(){
+   return [
+        '_view' => 'home.html',
+    ]; 
+});
 
-$app->get('/*/*/*', new PackageController);
+$app->get('/contact', function(){
+    return [
+        '_view' => 'home.html',
+    ];
+});
+
+
+$app->get('/*/*/*', new PackageController($c));
 
 
 $app->always(
     'Accept',
     [
-        'text/html' => new TwigRoutine($c->twig),
+        'text/html' => (new TwigRoutine($c->twig))->addGlobalVar('current_url', $_SERVER['REQUEST_URI']),
         'application/json' => new JsonRoutine,
     ]
 );

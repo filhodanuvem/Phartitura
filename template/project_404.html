@@ -1,8 +1,13 @@
 {% extends 'layout.html' %}
 
 {% block main %}
-    <div>
-        Wow! The project {{ name }} was not found. <br>
-        <a>Back to home</a> or listen Mozart!
+    <div id='container_404'>
+        <img src="/images/elephant_confused.png">
+        <div id='alert-404' class='alert-warning'>
+            <h2>404</h2>
+            <h4>The package '{{ name }}' was not found in Packagist. </h4><br>
+            <a href='/'>Back to home</a> listening Mozart! <br>
+            <small>Or <a href="https://github.com/cloudson/Phartitura/issues/new" >report a bug</a></small>
+        </div>    
     </div>
 {% endblock %}
