@@ -2,7 +2,7 @@
 
 {% block main %}
     <div id="project_table">
-        <h2>{{ project.name }}</h2>
+        <h2>{{ project.name }}<small>{{ project.version }}</small></h2>
         <small>{{ project.description }}</small>
         <div id='dependencies'>
             <div class='row dependency-head'>

@@ -20,4 +20,4 @@ __construct = ["../logs/phartitura.log",]
 [monolog Monolog\Logger]
 name = phartitura
 pushHandler[] = [streamHandler]
-; pushHandler[] = [newRelicHandler]
+pushHandler[] = [newRelicHandler]
