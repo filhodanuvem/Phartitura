@@ -1,8 +1,11 @@
 {% extends 'layout.html' %}
 
+{% block title %} - {{ project.nameCamelCase }} {% endblock %}
+
 {% block main %}
     <div id="project_table">
-        <h2>{{ project.name }}<small>{{ project.version }}</small></h2>
+
+        <h2><small><a href='/' title='back to home'><i class='glyphicon glyphicon-chevron-left'></i></a></small>{{ project.nameCamelCase }} <small>{{ project.version }}</small></h2>
         <small>{{ project.description }}</small>
         <div id='dependencies'>
             <div class='row dependency-head'>

@@ -1,5 +1,7 @@
 {% extends 'layout.html' %}
 
+{% block title %}, a dependency status viewer for composer{% endblock %}
+
 {% block main %}
     <div class='rows'>
         <div class='col-lg-6'>
@@ -13,8 +15,9 @@
                 of a library on composer. <br>
             </div>
             <ul class='home-projects-example'>
-                <li><a class='btn btn-default btn-sm' href='/respect/relational'>Respect/Relational</a></li>
                 <li><a class='btn btn-default btn-sm' href='/symfony/symfony'>Symfony/Symfony</a></li>
+                <li><a class='btn btn-default btn-sm' href='sonata-project/block-bundle'>Sonata-project/block-bundle</a></li>
+                <li><a class='btn btn-default btn-sm' href='/respect/relational'>Respect/Relational</a></li>
                 <li><a class='btn btn-default btn-sm' href='/composer/composer'>Composer/Composer</a></li>
             </ul>
             <h2 class='home-impact-phrase'>                

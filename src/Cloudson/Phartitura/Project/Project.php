@@ -11,6 +11,8 @@ class Project implements \IteratorAggregate, \Countable, \JsonSerializable
 
     private $name; 
 
+    private $nameCamelCase;
+
     private $dependencies;
 
     private $version; 
@@ -20,6 +22,7 @@ class Project implements \IteratorAggregate, \Countable, \JsonSerializable
     public function __construct($name, Version $version)
     {
         $this->setName($name);
+        $this->setNameCamelCase($name);
         $this->dependencies = [];  
         $this->version = $version;
     }
@@ -50,6 +53,22 @@ class Project implements \IteratorAggregate, \Countable, \JsonSerializable
     public function getName()
     {
         return $this->name;
+    }
+
+    private function setNameCamelCase($name)
+    {
+        $name   = ucfirst($name);
+        $barPos = strpos($name, '/');
+        $name[$barPos + 1] = strtoupper($name[$barPos + 1]);
+
+        $this->nameCamelCase = $name;
+
+        return $this;
+    }
+
+    public function getNameCamelCase()
+    {
+        return $this->nameCamelCase;
     }
 
     public function setVersion(Version $version)

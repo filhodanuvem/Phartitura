@@ -6,6 +6,28 @@ use Cloudson\Phartitura\Project\Version\Version;
 
 class ProjectTest extends \PHPUnit_Framework_TestCase
 {
+
+    /**
+    * @test
+    * @dataProvider getProjectNames
+    **/ 
+    public function should_returns_name_as_camelCase($name, $expected)
+    {
+        $project = new Project($name, new Version('0.0.0'));
+
+        $this->assertEquals($expected, $project->getNameCamelCase());
+    }
+
+    public function getProjectNames()
+    {
+        return [
+            ['respect/relational', 'Respect/Relational'],
+            ['cloudson/Gandalf', 'Cloudson/Gandalf'],
+            ['foo/1bar', 'Foo/1bar'],
+            ['symfony/symfony', 'Symfony/Symfony'],
+        ];
+    }
+
     /**
     * @test
     */ 
