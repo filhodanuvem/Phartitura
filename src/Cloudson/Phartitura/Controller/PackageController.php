@@ -19,9 +19,12 @@ class PackageController implements Routable
     }
 
     public function get($user, $packageName, $version =null)
-    {   
-        
-        $service = new ProjectService($this->container->redisAdapter);
+    {   $db = $this->container->database;
+        $pdo = new \PDO(sprintf(
+            "%s:dbname=%s;host=%s;port=%s", $db['db_driver'], $db['db_name'], $db['db_host'], $db['db_port']
+        ), $db['db_user'], $db['db_password']);
+
+        $service = new ProjectService($this->container->redisAdapter, $pdo);
         try {
             $project = $service->getProject($user, $packageName, str_replace('-', '.', $version));
         } catch (ProjectNotFoundException $e) {
@@ -32,6 +35,11 @@ class PackageController implements Routable
                 'name' => sprintf('%s/%s', $user, $packageName),
             ];
         } catch (VersionNotFoundException $e) {
+            $this->container->monolog->error($e->getMessage());
+            return [
+                '_view' => '500.html',
+            ];
+        } catch (\Exception $e) {
             $this->container->monolog->error($e->getMessage());
             return [
                 '_view' => '500.html',

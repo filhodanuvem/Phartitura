@@ -4,25 +4,30 @@
 
 {% block main %}
     <div id="project_table">
-        <h2><small><a href='/' title='back to home'><i class='glyphicon glyphicon-chevron-left'></i></a></small>{{ project.nameCamelCase }} <small>{{ project.version }}</small></h2>
-        <small>{{ project.description }}</small>
-        <div id='dependencies'>
-            <div class='row dependency-head'>
-                <div class='col-md-4 col-xs-4'>Dependency</div>
-                <div class='col-md-2 col-xs-2'>Rule</div>
-                <div class='col-md-2 col-xs-2'>Current</div>
-                <div class='col-md-2 col-xs-2'>Latest</div>
-                <div class='col-md-2 col-xs-2 text-center'>Status</div>
-            </div>
+        <h2 id='project_name'><small><a href='/' title='back to home'><i class='glyphicon glyphicon-chevron-left'></i></a></small>{{ project.nameCamelCase }} <small id='project_version'>{{ project.version }}</small></h2>
+        <div id='project_description'>{{ project.description }}</div>
+        <br>
+        <table class="table table-condensed " id='dependencies'>
+          <thead>
+            <tr>
+              <th>Dependency</th>
+              <th>Rule</th>
+              <th>Current</th>
+              <th>Latest</th>
+              <th class='text-center'>Status</th>
+            </tr>
+          </thead>
+          <tbody>
             {% for dependency in project.dependencies %}
-            <div class='row'>
-                <div class='col-md-4 col-xs-4'>{{ dependency.name }} <a href='/{{dependency.name}}' title='back to home'><i class='glyphicon glyphicon-link'></i></a></div>
-                <div class='col-md-2 col-xs-2'>{{ dependency.versionRule }}</div>
-                <div class='col-md-2 col-xs-2'>{{ dependency.version }}</div>
-                <div class='col-md-2 col-xs-2'>{{ dependency.latestVersion }}</div>
-                <div class='col-md-2 col-xs-2'><div class='status-square {% if dependency.version == dependency.latestVersion %}green{% else %}red{% endif %}'></div></div>
-            </div>
+            <tr>
+              <td>{{ dependency.name }} <a href='/{{dependency.name}}' title='back to home'><i class='glyphicon glyphicon-link'></i></a></td>
+              <td>{{ dependency.versionRule }}</td>
+              <td>{{ dependency.version }}</td>
+              <td>{{ dependency.latestVersion }}</td>
+              <td><div class='status-square {% if dependency.version == dependency.latestVersion %}green{% else %}red{% endif %}'></div></td>
+            </tr>
             {% endfor %}
-        </div>
+          </tbody>
+        </table>
     </div>
 {% endblock %}
