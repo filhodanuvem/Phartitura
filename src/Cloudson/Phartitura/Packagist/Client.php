@@ -10,6 +10,7 @@ use Cloudson\Phartitura\Project\Version\Version;
 use Cloudson\Phartitura\Project\Version\Comparator\ExactVersion;
 use Cloudson\Phartitura\Project\Exception\InvalidNameException;
 use Cloudson\Phartitura\Project\Exception\ProjectNotFoundException;
+use Cloudson\Phartitura\Cache\CacheAdapterInterface;
 
 class Client implements ClientProjectInterface
 {
@@ -17,14 +18,17 @@ class Client implements ClientProjectInterface
 
     private $hydrator; 
 
+    private $cache;
+
     const BASE = 'packagist.org';
 
     const RELATIVE_URL_PROJECT = '/packages/%s.json';
     
-    public function __construct(ClientAdapter $c, Hydrator $hydrator)
+    public function __construct(ClientAdapter $c, Hydrator $hydrator, CacheAdapterInterface $cacheClient)
     {
         $this->c = $c;
         $this->hydrator = $hydrator;
+        $this->cache = $cacheClient;
     }
 
 
@@ -58,41 +62,48 @@ class Client implements ClientProjectInterface
     public function getProject($name, $versionRulestring = null, $recursive = true)
     {
         $p = new Project($name, new Version('0.0.0'));
-        $this->ping($name);
-        try {
-            $response = $this->c->get($this->getUrlPRoject($name));    
-        } catch (\Exception $e) {
-            return null;
+        $json = $this->cache->getProject($name);
+        if (null === $json) {
+            $this->ping($name);
+            try {
+                $response = $this->c->get($this->getUrlPRoject($name));
+                $json = (string)$response->getBody();
+                $this->cache->saveProject($name, $json); 
+            } catch (\Exception $e) {
+                return null;
+            }
         }
         
-        $this->hydrateProject($p, $response, $versionRulestring, $recursive);
+        $this->hydrateProject($p, $json, $versionRulestring, $recursive);
         return $p;
     }
 
     public function getDependency($name, $versionRulestring = null, $recursive = true)
     {
         $d = new Dependency($name, new Version('0.0.0'));
-        try {
-            $response = $this->c->get($this->getUrlPRoject($name));    
-        } catch (\Exception $e) {
-            return null;
+        $json = $this->cache->getProject($name);
+        if (null === $json) {
+            $this->ping($name);
+            try {
+                $response = $this->c->get($this->getUrlPRoject($name));    
+                $json = (string)$response->getBody();
+                $this->cache->saveProject($name, $json);
+            } catch (\Exception $e) {
+                return null;
+            }
         }
         
-        $this->hydrateProject($d, $response, $versionRulestring, $recursive);
+        $this->hydrateProject($d, $json, $versionRulestring, $recursive);
         return $d;
     }
 
 
-    private function hydrateProject(Project $p, $response, $versionRulestring, $recursive)
+    private function hydrateProject(Project $p, $json, $versionRulestring, $recursive)
     {
         $this->hydrator->setVersionRule($versionRulestring);
-        $json = json_decode($response->getBody(), true)?: [];
+        $json = json_decode($json, true)?: [];
 
-        // try0 {
-            $this->hydrator->hydrate($json, $p);    
-        // } catch (\BadMethodCallException $e) {
-        //     return null;
-        // }
+        $this->hydrator->hydrate($json, $p);    
 
         $requireJson = $this->getDependenciesFromVersionProject($json, $p->getVersion(), 'require');
         $this->setDependencies($requireJson, $p, $recursive);

@@ -21,3 +21,10 @@ __construct = ["../logs/phartitura.log",]
 name = phartitura
 pushHandler[] = [streamHandler]
 pushHandler[] = [newRelicHandler]
+
+[redis Redis]
+connect[] = ["tunnel.pagodabox.com", 6379]
+
+[redisAdapter Cloudson\Phartitura\Cache\RedisAdapter]
+client = [redis]
+timeout = 10

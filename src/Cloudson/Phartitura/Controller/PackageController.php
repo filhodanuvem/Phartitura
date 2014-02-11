@@ -21,7 +21,7 @@ class PackageController implements Routable
     public function get($user, $packageName, $version =null)
     {   
         
-        $service = new ProjectService;
+        $service = new ProjectService($this->container->redisAdapter);
         try {
             $project = $service->getProject($user, $packageName, str_replace('-', '.', $version));
         } catch (ProjectNotFoundException $e) {
