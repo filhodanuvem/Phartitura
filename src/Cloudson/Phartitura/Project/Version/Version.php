@@ -4,7 +4,7 @@ namespace Cloudson\Phartitura\Project\Version;
 
 class Version
 {
-    const PATTERN_SEMVER = '/^(v){0,1}([0-9]+)\.([0-9]+)\.([0-9]+)([a-zA-Z]*|-dev|-alpha[0-9]*)$/';
+    const PATTERN_SEMVER = '/^(v){0,1}([0-9]+)\.([0-9]+)\.([0-9]+)([a-zA-Z]*|@dev|-dev|-alpha[0-9]*)$/';
 
     private $valueString;
 

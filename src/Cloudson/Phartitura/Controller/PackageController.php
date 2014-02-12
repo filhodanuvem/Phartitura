@@ -19,12 +19,9 @@ class PackageController implements Routable
     }
 
     public function get($user, $packageName, $version =null)
-    {   $db = $this->container->database;
-        $pdo = new \PDO(sprintf(
-            "%s:dbname=%s;host=%s;port=%s", $db['db_driver'], $db['db_name'], $db['db_host'], $db['db_port']
-        ), $db['db_user'], $db['db_password']);
+    {   
 
-        $service = new ProjectService($this->container->redisAdapter, $pdo);
+        $service = new ProjectService($this->container->redisAdapter);
         try {
             $project = $service->getProject($user, $packageName, str_replace('-', '.', $version));
         } catch (ProjectNotFoundException $e) {

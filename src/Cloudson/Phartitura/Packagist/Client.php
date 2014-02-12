@@ -107,7 +107,7 @@ class Client implements ClientProjectInterface
 
         $requireJson = $this->getDependenciesFromVersionProject($json, $p->getVersion(), 'require');
         $this->setDependencies($requireJson, $p, $recursive);
-       
+        
     }
 
     private function getDependenciesFromVersionProject($json, Version $version, $requireKey = 'require')

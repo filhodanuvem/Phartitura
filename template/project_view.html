@@ -26,6 +26,10 @@
               <td>{{ dependency.latestVersion }}</td>
               <td><div class='status-square {% if dependency.version == dependency.latestVersion %}green{% else %}red{% endif %}'></div></td>
             </tr>
+            {% else %}
+            <tr>
+              <td><h3>No dependencies :)</h3></td>
+            </tr>
             {% endfor %}
           </tbody>
         </table>

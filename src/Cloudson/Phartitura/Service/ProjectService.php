@@ -19,6 +19,10 @@ class ProjectService
 
     private $client; 
 
+    private $mapper;
+
+    private $cacheClient;
+
     public function __construct(RedisAdapter $cache)
     {
         $comparator = new Comparator; 
@@ -33,16 +37,29 @@ class ProjectService
         $hydrator = new Hydrator($comparator);
         
         $this->client = new Client($gAdapter, $hydrator, $cache);
+        $this->cacheClient = $cache;
     }
 
     public function getProject($username, $projectName, $version = null)
     {
+        $key = sprintf('%s/%s', $username, $projectName);
+
         $project = $this->client->getProject(
-            sprintf('%s/%s', $username, $projectName),
+            $key,
             $version
         );
-
+        $this->pushOnLatestProjectsList($key);
         return $project; 
+    }
+
+    public function pushOnLatestProjectsList($projectName)
+    {
+        $this->cacheClient->saveView($projectName);
+    }
+
+    public function getLatestProjectsList()
+    {
+        return $this->cacheClient->getViews();
     }
 
 }

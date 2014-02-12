@@ -6,6 +6,7 @@
         <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="/css/styles.css">
         <link rel="shortcut icon" href="/images/logo.ico">
+        <link href='http://fonts.googleapis.com/css?family=Niconne' rel='stylesheet' type='text/css'>
     </head>
     <body>
         <div class='container'>
@@ -16,7 +17,7 @@
                   <li {% if _current_url == '/about' %}class="active"{% endif %}><a href="/about">About</a></li>
                 </ul>
 
-                <h3 class="text-muted" ><a href="/"><img src="/images/logo.png" width='48px' height='48px'> Phartitura</a> <small class='hidden-xs'>Watching your php dependencies</small></h3>
+                <h3 class="text-muted" id='logo'><a href="/"><img src="/images/logo.png" width='48px' height='48px'> Phartitura</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small class='hidden-xs'>A dependency status viewer for composer</small></h3>
             </div>
         {% block main %}{% endblock %}
         <div class="footer">

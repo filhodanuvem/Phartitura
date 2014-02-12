@@ -9,4 +9,8 @@ interface CacheAdapterInterface
     public function hasProject($projectName);
 
     public function saveProject($projectName, $json);
+
+    public function saveView($projectName);
+    
+    public function getViews();
 }

@@ -4,7 +4,7 @@
 
 {% block main %}
     <div class='rows'>
-        <div class='col-lg-6'>
+        <div class='col-lg-8'>
             <h2 class='home-impact-phrase'>                
             You want know if your library is up to date.
             Get on a phartitura that shows it for you.
@@ -36,8 +36,13 @@
             
             </div>
         </div>
-        <div class='col-lg-6'>
-
+        <div class='col-lg-4'>
+            <ul id='home-latest-projects'>
+                <li>Recently watched</li>
+                {% for project in latestProjects %}
+                    <li><a href="/{{ project }}">{{ project }}</a></li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 {% endblock %}
