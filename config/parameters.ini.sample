@@ -27,5 +27,5 @@ connect[] = ["tunnel.pagodabox.com", 6379]
 
 [redisAdapter Cloudson\Phartitura\Cache\RedisAdapter]
 client = [redis]
-timeout = 1800
+timeout = 43200
 latestProjectsListLimit = 8
