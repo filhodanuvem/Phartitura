@@ -2,7 +2,8 @@
 
 namespace Cloudson\Phartitura\Packagist; 
 
-use Cloudson\Phartitura\Project\Version\Comparator\ExactVersion; 
+use Cloudson\Phartitura\Project\Version\Comparator\ExactVersion;
+use Cloudson\Phartitura\Project\Version\Comparator;  
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,7 +18,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->method('head')
             ->will($this->returnValue($response));
 
-        $h = new Hydrator(new ExactVersion);
+        $comparator = new Comparator;
+        $comparator->addComparator(new ExactVersion);
+
+        $h = new Hydrator($comparator);
         $cacheMock = $this->getMock('Cloudson\Phartitura\Cache\CacheAdapterInterface');
 
         $c = new Client($curlClient, $h, $cacheMock);
@@ -36,7 +40,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->method('head')
             ->will($this->returnValue($response));
 
-        $h = new Hydrator(new ExactVersion);
+        $comparator = new Comparator;
+        $comparator->addComparator(new ExactVersion);
+
+        $h = new Hydrator($comparator);
         $cacheMock = $this->getMock('Cloudson\Phartitura\Cache\CacheAdapterInterface');
 
         $c = new Client($curlClient, $h, $cacheMock);
@@ -51,7 +58,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->method('head')
             ->will($this->returnValue($response));
 
-        $h = new Hydrator(new ExactVersion);
+        $comparator = new Comparator;
+        $comparator->addComparator(new ExactVersion);
+
+        $h = new Hydrator($comparator);
 
         $c = new Client($curlClient, $h);
         $c->ping('cloudson/oliveira');
@@ -67,7 +77,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $response = new MockResponseOKAdapter; 
         $curlClient = $this->getMock('Cloudson\Phartitura\Curl\ClientAdapter');
         
-        $h = new Hydrator(new ExactVersion);
+        $comparator = new Comparator;
+        $comparator->addComparator(new ExactVersion);
+
+        $h = new Hydrator($comparator);
         $cacheMock = $this->getMock('Cloudson\Phartitura\Cache\CacheAdapterInterface');
 
         $c = new Client($curlClient, $h, $cacheMock);
@@ -89,7 +102,11 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->method('head')
             ->will($this->returnValue($response));
         
-        $h = new Hydrator(new ExactVersion);
+        $comparator = new Comparator;
+        $comparator->addComparator(new ExactVersion);
+
+        $h = new Hydrator($comparator);
+
         $cacheMock = $this->getMock('Cloudson\Phartitura\Cache\CacheAdapterInterface');
 
         $c = new Client($curlClient, $h, $cacheMock);
@@ -114,7 +131,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->method('head')
             ->will($this->returnValue($response));
 
-        $h = new Hydrator(new ExactVersion);
+        $comparator = new Comparator;
+        $comparator->addComparator(new ExactVersion);
+
+        $h = new Hydrator($comparator);
         $cacheMock = $this->getMock('Cloudson\Phartitura\Cache\CacheAdapterInterface');
 
         $c = new Client($curlClient, $h, $cacheMock);
@@ -139,7 +159,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->method('head')
             ->will($this->returnValue($response));
 
-        $h = new Hydrator(new ExactVersion);
+        $comparator = new Comparator;
+        $comparator->addComparator(new ExactVersion);
+
+        $h = new Hydrator($comparator);
         $cacheMock = $this->getMock('Cloudson\Phartitura\Cache\CacheAdapterInterface');
 
         $c = new Client($curlClient, $h, $cacheMock);

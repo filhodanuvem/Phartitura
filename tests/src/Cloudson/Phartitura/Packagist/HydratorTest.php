@@ -16,7 +16,10 @@ class HydratorTest extends \PHPUnit_Framework_TestCase
 
         $project = new Project\Project('cloudson/gandalf', new Project\Version\Version('dev-master'));
 
-        $hydrator = new Hydrator(new Project\Version\Comparator\ExactVersion);
+        $comparator = new Project\Version\Comparator;
+        $comparator->addComparator(new Project\Version\Comparator\ExactVersion);
+
+        $hydrator = new Hydrator($comparator);
         $hydrator->hydrate($json, $project);
     }
 
@@ -42,7 +45,12 @@ class HydratorTest extends \PHPUnit_Framework_TestCase
 
         $project = new Project\Project('undefined/undefined', new Project\Version\Version('0.0.0'));
 
-        $hydrator = new Hydrator(new Project\Version\Comparator\ExactVersion, '0.7.0');
+        $comparator = new Project\Version\Comparator;
+        $comparator->addComparator(new Project\Version\Comparator\ExactVersion);
+        $comparator->addComparator(new Project\Version\Comparator\TildeVersion);
+        $comparator->addComparator(new Project\Version\Comparator\RangeVersion);
+
+        $hydrator = new Hydrator($comparator, '0.7.0');
         $hydrator->hydrate($json, $project);
 
         $this->assertEquals('cloudson/gandalf', $project->getName());
@@ -84,7 +92,10 @@ class HydratorTest extends \PHPUnit_Framework_TestCase
 
         $project = new Project\Project('undefined/undefined', new Project\Version\Version('0.0.0'));
 
-        $hydrator = new Hydrator(new Project\Version\Comparator\WildCardVersion, '*');
+        $comparator = new Project\Version\Comparator;
+        $comparator->addComparator(new Project\Version\Comparator\WildCardVersion);
+
+        $hydrator = new Hydrator($comparator, '*');
         $hydrator->hydrate($json, $project);
 
         $this->assertEquals('1.40.0', (string)$project->getVersion());
@@ -124,7 +135,11 @@ class HydratorTest extends \PHPUnit_Framework_TestCase
 
         $project = new Project\Project('undefined/undefined', new Project\Version\Version('0.0.0'));
 
-        $hydrator = new Hydrator(new Project\Version\Comparator\ExactVersion, '1.42.0');
+        $comparator = new Project\Version\Comparator;
+        $comparator->addComparator(new Project\Version\Comparator\ExactVersion);
+
+
+        $hydrator = new Hydrator($comparator, '1.42.0');
         $hydrator->hydrate($json, $project);
 
         $this->assertEquals('1.42.0', (string)$project->getVersion());
@@ -165,7 +180,10 @@ class HydratorTest extends \PHPUnit_Framework_TestCase
 
         $project = new Project\Project('undefined/undefined', new Project\Version\Version('0.0.0'));
 
-        $hydrator = new Hydrator(new Project\Version\Comparator\ExactVersion, '6.6.6');
+        $comparator = new Project\Version\Comparator;
+        $comparator->addComparator(new Project\Version\Comparator\ExactVersion);
+
+        $hydrator = new Hydrator($comparator, '6.6.6');
         $hydrator->hydrate($json, $project);
     }
 

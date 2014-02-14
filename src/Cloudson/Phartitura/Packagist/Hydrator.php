@@ -7,9 +7,11 @@ use Cloudson\Phartitura\Project\Project;
 use Cloudson\Phartitura\Project\Dependency;
 use Cloudson\Phartitura\Project\Version\Version;
 use Cloudson\Phartitura\Packagist\VersionHeap;
-use Cloudson\Phartitura\Project\Version\ComparatorStrategyInterface;
+use Cloudson\Phartitura\Project\Version\Comparator;
 use Cloudson\Phartitura\Project\Exception\VersionNotFoundException;
 use Cloudson\Phartitura\Project\Exception\InvalidDataToHydration;
+use Cloudson\Phartitura\Project\Version\Comparator\Decorator\AddStableRule;
+use Cloudson\Phartitura\Project\Version\Comparator\Decorator\AddSelfVersionRule;
 
 class Hydrator implements HydratorProjectInterface
 {
@@ -17,7 +19,7 @@ class Hydrator implements HydratorProjectInterface
 
     private $versionRule;
 
-    public function __construct(ComparatorStrategyInterface $comparator, $versionRule = null)
+    public function __construct(Comparator $comparator, $versionRule = null)
     {
         $this->comparator = $comparator;
 
@@ -57,6 +59,8 @@ class Hydrator implements HydratorProjectInterface
             }
             $versionsByPriority->insert($version);
         }
+        $addStableRule = new AddStableRule($versionsByPriority);
+        $addStableRule($this->comparator);
 
         if ($project instanceof Dependency) {
             $versionData = $versionsByPriority->current();
@@ -68,6 +72,10 @@ class Hydrator implements HydratorProjectInterface
             $currentVersion = new Version($version['version']);
             if (!$this->versionRule || $this->comparator->compare($currentVersion, $this->versionRule)) {
                 $project->setVersion($currentVersion);
+
+                $addSelfVersionRule = new AddSelfVersionRule($project);
+                $addSelfVersionRule($this->comparator);
+                
                 return;
             }
         }
@@ -86,5 +94,15 @@ class Hydrator implements HydratorProjectInterface
     public function getVersionRule()
     {
         return $this->versionRule;
+    }
+
+    public function getComparator()
+    {
+        return $this->comparator;
+    }
+
+    public function setComparator(Comparator $comprator)
+    {
+        $this->comparato = $comparator;
     }
 }
