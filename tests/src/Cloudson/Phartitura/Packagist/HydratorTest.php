@@ -241,7 +241,32 @@ class HydratorTest extends \PHPUnit_Framework_TestCase
         return [
             ['>=0.0.1, <0.1.0', '0.0.1'],
             ['>0.0.1, <5.0.0', '3.3.0'],
-            ['>0.0.1, <3.0.0', '0.2.0'],
+            ['>0.0.1, <1.0', '0.2.0'],
+        ];
+    }
+
+    /**
+    * @test
+    * @dataProvider getRulesAndFoundsTilde
+    */ 
+    public function should_hydrate_with_tilde_rule($rule, $expected)
+    {
+        $json = $this->getJson();
+        $project = new Project\Project('undefined/undefined', new Project\Version\Version('0.0.0'));
+
+        $comparator = new Project\Version\Comparator;
+        $comparator->addComparator(new Project\Version\Comparator\TildeVersion);
+
+        $hydrator = new Hydrator($comparator, $rule);
+        $hydrator->hydrate($json, $project);
+
+        $this->assertEquals($expected, (string)$project->getVersion());   
+    }   
+
+    public function getRulesAndFoundsTilde()
+    {
+        return  [
+            ['~1.0', '1.0']
         ];
     }
 
@@ -256,19 +281,25 @@ class HydratorTest extends \PHPUnit_Framework_TestCase
                         'name' => 'cloudson/phartitura',
                         'description' => '',
                         'version' => '0.0.1',
-                        'time' => '2014-01-23T00:12:17+00:00'
+                        'time' => '2014-01-01T00:12:17+00:00'
                     ],
                     '0.2.0' => [ 
                         'name' => 'cloudson/phartitura',
                         'description' => '',
                         'version' => '0.2.0',
-                        'time' => '2014-01-24T00:12:17+00:00'
+                        'time' => '2014-01-02T00:12:17+00:00'
                     ],
                     '3.3.0' => [ 
                         'name' => 'cloudson/phartitura',
                         'description' => '',
                         'version' => '3.3.0',
                         'time' => '2014-01-25T00:12:17+00:00'
+                    ],
+                    'v1.0' => [
+                        'name' => 'cloudson/phartitura',
+                        'description' => '',
+                        'version' => 'v1.0',
+                        'time' => '2014-01-10T00:12:17+00:00'
                     ],
                 ],
             ]

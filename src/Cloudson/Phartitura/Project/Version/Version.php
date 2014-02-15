@@ -4,7 +4,7 @@ namespace Cloudson\Phartitura\Project\Version;
 
 class Version
 {
-    const PATTERN_SEMVER = '/^(v){0,1}([0-9]+)\.([0-9]+)\.([0-9]+)([a-zA-Z]*|@dev|-dev|-alpha[0-9]*)$/';
+    const PATTERN_SEMVER = '/^(v){0,1}([0-9]+)(\.([0-9]+)(\.([0-9]+)([a-zA-Z]*|@dev|-dev|-alpha[0-9]*)){0,1}){0,1}$/';
 
     private $valueString;
 
@@ -21,7 +21,7 @@ class Version
 
     public function isSemVer()
     {
-        return preg_match(self::PATTERN_SEMVER, $this->valueString) == 1;
+        return preg_match(self::PATTERN_SEMVER, $this->valueString) !== false;
     }
 
     public function getMajor()
@@ -31,12 +31,12 @@ class Version
 
     public function getMinor()
     {
-        return $this->getExplodedVersion()[3][0];
+        return $this->getExplodedVersion()[4][0];
     }
 
     public function getPatch()
     {
-        return $this->getExplodedVersion()[4][0];
+        return $this->getExplodedVersion()[6][0];
     }
 
     private function getExplodedVersion()
