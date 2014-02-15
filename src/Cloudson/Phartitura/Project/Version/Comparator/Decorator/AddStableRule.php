@@ -5,7 +5,7 @@ namespace Cloudson\Phartitura\Project\Version\Comparator\Decorator;
 use Cloudson\Phartitura\Project\Version\Comparator;
 use Cloudson\Phartitura\Project\Version\Version;
 use Cloudson\Phartitura\Project\Version\Comparator\StableVersion;
-use Cloudson\Phartitura\Packagist\VersionHeap;
+use Cloudson\Phartitura\Project\VersionHeap;
 
 class AddStableRule extends ComparatorDecoratorInterface
 {

@@ -6,7 +6,7 @@ use Cloudson\Phartitura\HydratorProjectInterface;
 use Cloudson\Phartitura\Project\Project;
 use Cloudson\Phartitura\Project\Dependency;
 use Cloudson\Phartitura\Project\Version\Version;
-use Cloudson\Phartitura\Packagist\VersionHeap;
+use Cloudson\Phartitura\Project\VersionHeap;
 use Cloudson\Phartitura\Project\Version\Comparator;
 use Cloudson\Phartitura\Project\Exception\VersionNotFoundException;
 use Cloudson\Phartitura\Project\Exception\InvalidDataToHydration;
