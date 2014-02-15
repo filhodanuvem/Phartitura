@@ -9,7 +9,7 @@ use Cloudson\Phartitura\Project\Version\Version;
 class TildeVersion implements ComparatorStrategyInterface
 {
 
-    const PATTERN = '/~([0-9]+)(\.([0-9]+)){0,1}(\.([0-9])+){0,1}/';
+    const PATTERN = '/~(([0-9]+)(\.([0-9]+)){0,1}(\.([0-9]+)){0,1})/';
 
     public function compare(Version $versionCurrent, $versionRule)
     {
@@ -33,11 +33,12 @@ class TildeVersion implements ComparatorStrategyInterface
 
         }
 
-        $major = $matches[1][0]; 
-        $minor = $matches[3][0] ? intval($matches[3][0]): 0;
+        $rule  = $matches[1][0];
+        $major = $matches[2][0]; 
+        $minor = $matches[4][0] ? intval($matches[4][0]): 0;
         $patch = $matches[5][0] ? intval($matches[5][0]): 0;
 
-        return sprintf(">=%d.%s.%s,<%d.%s.0", $major, $minor, $patch, $major, $minor + 1); 
+        return sprintf(">=%s,<%d.%s.0", $rule, $major, $minor + 1); 
     }
 
 }

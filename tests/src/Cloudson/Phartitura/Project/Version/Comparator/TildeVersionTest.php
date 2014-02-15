@@ -23,6 +23,7 @@ class TildeVersionTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['1.0.3', '~1.0'],
+            ['v1.0', '~1.0'],
             ['1.2.3', '~1.2'],
             ['1.2.5', '~1.2.5'],
             ['1.2.46', '~1.2.5'],
@@ -47,8 +48,8 @@ class TildeVersionTest extends \PHPUnit_Framework_TestCase
     public function getRulesConvertions()
     {
         return [
-            ['~1.0', '>=1.0.0,<1.1.0'],
-            ['~2.3', '>=2.3.0,<2.4.0'],
+            ['~1.0', '>=1.0,<1.1.0'],
+            ['~2.3', '>=2.3,<2.4.0'],
             ['~42.30.9', '>=42.30.9,<42.31.0'],
             ['~2.0.3', '>=2.0.3,<2.1.0'],
         ];

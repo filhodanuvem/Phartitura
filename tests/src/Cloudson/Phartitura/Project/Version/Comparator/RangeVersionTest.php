@@ -52,6 +52,7 @@ class RangeVersionTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [new Version('2.0'), '>1.0'],
+            [new Version('v1.0'), '>=1.0,<2.0.0'],
             [new Version('2.3.2'), '>=2.2'],
             [new Version('2.2'), '>1, <=2.2'],
             [new Version('2.3'), '>2,<=2.4'],
