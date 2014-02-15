@@ -5,5 +5,4 @@ before_commands:
 tools: 
     php_code_coverage: true
     php_code_sniffer: true
-    php_hhvm: true
     
