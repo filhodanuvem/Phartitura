@@ -29,7 +29,8 @@ class PackageController implements Routable
             http_response_code(404);
             return [
                 '_view' => 'project_404.html',
-                'name' => sprintf('%s/%s', $user, $packageName),
+                'name' => $e->getProjectName(),
+                'AProjectWasNotFound' => $e->getProjectName() == sprintf('%s/%s', $user, $packageName),
             ];
         } catch (VersionNotFoundException $e) {
             $this->container->monolog->error($e->getMessage());
@@ -37,6 +38,7 @@ class PackageController implements Routable
                 '_view' => '500.html',
             ];
         } catch (\Exception $e) {
+            var_dump($e);
             $this->container->monolog->error($e->getMessage());
             return [
                 '_view' => '500.html',

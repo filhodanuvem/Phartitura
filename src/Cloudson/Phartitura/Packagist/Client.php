@@ -11,6 +11,7 @@ use Cloudson\Phartitura\Project\Version\Comparator\ExactVersion;
 use Cloudson\Phartitura\Project\Exception\InvalidNameException;
 use Cloudson\Phartitura\Project\Exception\ProjectNotFoundException;
 use Cloudson\Phartitura\Cache\CacheAdapterInterface;
+use Cloudson\Phartitura\Curl\Exception\ClientErrorResponseException;
 
 class Client implements ClientProjectInterface
 {
@@ -47,16 +48,29 @@ class Client implements ClientProjectInterface
             ));
         }
         
-        $response = $this->c->head($this->getUrlPRoject($projectName));
+        try {
+            $response = $this->c->head($this->getUrlPRoject($projectName));
+        } catch (ClientErrorResponseException $e) {
+            $this->throwProjectNotFoundException($e->getMessage(), $projectName);
+        }
+        
         
         $statusCode = $response->getStatusCode();
         if (($statusCode >= 500 and $statusCode < 600) || $statusCode == 404) {
-            throw new ProjectNotFoundException(sprintf(
-                $response->getBody()
-            ));
+            $this->throwProjectNotFoundException($response->getBody(), $projectName);
         }
 
         return $statusCode;
+    }
+
+    private function throwProjectNotFoundException($message, $projectName)
+    {
+        $projectNotFoundException = new ProjectNotFoundException(sprintf(
+            $message
+        ));
+        $projectNotFoundException->setProjectName($projectName);
+        
+        throw $projectNotFoundException;
     }
 
     public function getProject($name, $versionRulestring = null, $recursive = true)
