@@ -10,6 +10,9 @@ class VersionHeap extends \SplMaxHeap
 
     public function compare($version1, $version2)
     {
+        if ($version2['version'] == 'dev-master') {
+            return self::HIGHER;
+        }
 
         $date1 = new \DateTime($version1['time']);
         $date2 = new \DateTime($version2['time']);

@@ -95,7 +95,7 @@ class HydratorTest extends \PHPUnit_Framework_TestCase
         $comparator = new Project\Version\Comparator;
         $comparator->addComparator(new Project\Version\Comparator\WildCardVersion);
 
-        $hydrator = new Hydrator($comparator, '*');
+        $hydrator = new Hydrator($comparator);
         $hydrator->hydrate($json, $project);
 
         $this->assertEquals('1.40.0', (string)$project->getVersion());

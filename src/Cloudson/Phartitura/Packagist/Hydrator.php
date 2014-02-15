@@ -54,7 +54,7 @@ class Hydrator implements HydratorProjectInterface
         // we want ordering versions by datetime desc, excluding no tags using semver
         $versionsByPriority = new VersionHeap;
         foreach ($versions as $versionString => $version) {
-            if (!preg_match(Version::PATTERN_SEMVER, $versionString)) {
+            if ($this->ignoreVersion($versionString)) {
                 continue;
             }
             $versionsByPriority->insert($version);
@@ -84,6 +84,17 @@ class Hydrator implements HydratorProjectInterface
             'Project %s with range versioning "%s" not found', $project->getName(), $this->versionRule
         ));
         
+    }
+
+    private function ignoreVersion($versionString)
+    {
+        if (preg_match(Version::PATTERN_SEMVER, $versionString)) {
+            return false;
+        }
+
+        return !in_array($versionString, [
+            'dev-master'
+        ]);
     }
 
     public function setVersionRule($version)
