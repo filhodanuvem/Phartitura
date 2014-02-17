@@ -1,6 +1,6 @@
 <?php
 
-namespace Cloudson\Phartitura\Packagist; 
+namespace Cloudson\Phartitura\Project; 
 
 class VersionHeap extends \SplMaxHeap
 {
@@ -12,6 +12,8 @@ class VersionHeap extends \SplMaxHeap
     {
         if ($version2['version'] == 'dev-master') {
             return self::HIGHER;
+        } elseif ($version1['version'] == 'dev-master') {
+            return self::LOWER;
         }
 
         $date1 = new \DateTime($version1['time']);
