@@ -38,7 +38,6 @@ class PackageController implements Routable
                 '_view' => '500.html',
             ];
         } catch (\Exception $e) {
-            var_dump($e);
             $this->container->monolog->error($e->getMessage());
             return [
                 '_view' => '500.html',
