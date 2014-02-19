@@ -5,11 +5,7 @@ namespace Cloudson\Phartitura\Service;
 use Cloudson\Phartitura\ClientProjectInterface;
 use Cloudson\Phartitura\Packagist\Client; 
 use Cloudson\Phartitura\Packagist\Hydrator;
-use Cloudson\Phartitura\Project\Version\Comparator\ExactVersion;
-use Cloudson\Phartitura\Project\Version\Comparator\RangeVersion;
-use Cloudson\Phartitura\Project\Version\Comparator\TildeVersion;
-use Cloudson\Phartitura\Project\Version\Comparator\WildCardVersion;
-use Cloudson\Phartitura\Project\Version\Comparator;
+use Cloudson\Phartitura\Project\Version\Comparator\ComparatorBuilder;
 use Guzzle\Http\Client as Guzzle; 
 use Cloudson\Phartitura\Curl\GuzzleAdapter;
 use Cloudson\Phartitura\Cache\RedisAdapter;
@@ -25,16 +21,16 @@ class ProjectService
 
     public function __construct(RedisAdapter $cache)
     {
-        $comparator = new Comparator; 
-        $comparator->addComparator(new ExactVersion);
-        $comparator->addComparator(new TildeVersion);
-        $comparator->addComparator(new RangeVersion);
-        $comparator->addComparator(new WildCardVersion);
+        
+        $builder = new ComparatorBuilder;
+        $builder->withExactVersion()->withRangeVersion()->withTildeVersion()->WildCardVersion();
+
+        $hydrator = new Hydrator($builder, '6.6.6');
 
         $g = new Guzzle('http://'.Client::BASE);
         
         $gAdapter = new GuzzleAdapter($g);
-        $hydrator = new Hydrator($comparator);
+        $hydrator = new Hydrator($builder);
         
         $this->client = new Client($gAdapter, $hydrator, $cache);
         $this->cacheClient = $cache;

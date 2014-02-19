@@ -2,10 +2,10 @@
 
 namespace Cloudson\Phartitura\Project\Version\Comparator;
 
-use Cloudson\Phartitura\Project\Version\ComparatorStrategyInterface;
+use Cloudson\Phartitura\Project\Version\ComparatorInterface;
 use Cloudson\Phartitura\Project\Version\Version;
 
-class RangeVersion implements ComparatorStrategyInterface
+class RangeVersion implements ComparatorInterface
 {
 
     const PATTERN = '/^(>|>=|<|<=|!=)([0-9]+(\.[0-9]+){0,2}([a-zA-Z]*|-dev))((,|\|)(>|>=|<|<=|!=)([0-9]+(\.[0-9]+){0,2}([a-zA-Z]*|-dev))){0,1}$/';

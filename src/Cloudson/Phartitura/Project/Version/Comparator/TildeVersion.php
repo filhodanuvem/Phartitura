@@ -2,11 +2,11 @@
 
 namespace Cloudson\Phartitura\Project\Version\Comparator;
 
-use Cloudson\Phartitura\Project\Version\ComparatorStrategyInterface;
+use Cloudson\Phartitura\Project\Version\ComparatorInterface;
 use Cloudson\Phartitura\Project\Version\Version;
 
 
-class TildeVersion implements ComparatorStrategyInterface
+class TildeVersion implements ComparatorInterface
 {
 
     const PATTERN = '/~(([0-9]+)(\.([0-9]+)){0,1}(\.([0-9]+)){0,1})/';

@@ -2,10 +2,10 @@
 
 namespace Cloudson\Phartitura\Project\Version\Comparator;
 
-use Cloudson\Phartitura\Project\Version\ComparatorStrategyInterface;
+use Cloudson\Phartitura\Project\Version\ComparatorInterface;
 use Cloudson\Phartitura\Project\Version\Version;
 
-class WildCardVersion implements ComparatorStrategyInterface
+class WildCardVersion implements ComparatorInterface
 {
 
     public function compare(Version $versionCurrent, $versionRule)

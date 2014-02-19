@@ -4,9 +4,9 @@ namespace Cloudson\Phartitura\Project\Version;
 
 use Cloudson\Phartitura\Project\Project;
 use Cloudson\Phartitura\Project\Version\Version;
-use Cloudson\Phartitura\Project\Version\ComparatorStrategyInterface;
+use Cloudson\Phartitura\Project\Version\ComparatorInterface;
 
-class Comparator implements ComparatorStrategyInterface
+class Comparator implements ComparatorInterface
 {
     private $comparators = array();
 
@@ -21,7 +21,7 @@ class Comparator implements ComparatorStrategyInterface
         return false;
     }
 
-    public function addComparator(ComparatorStrategyInterface $comparator)
+    public function addComparator(ComparatorInterface $comparator)
     {
         $this->comparators[] = $comparator; 
     }

@@ -12,16 +12,17 @@ use Cloudson\Phartitura\Project\Exception\VersionNotFoundException;
 use Cloudson\Phartitura\Project\Exception\InvalidDataToHydration;
 use Cloudson\Phartitura\Project\Version\Comparator\Decorator\AddStableRule;
 use Cloudson\Phartitura\Project\Version\Comparator\Decorator\AddSelfVersionRule;
+use Cloudson\Phartitura\Project\Version\Comparator\ComparatorBuilder;
 
 class Hydrator implements HydratorProjectInterface
 {
-    private $comparator; 
+    private $builder; 
 
     private $versionRule;
 
-    public function __construct(Comparator $comparator, $versionRule = null)
+    public function __construct(ComparatorBuilder $builder, $versionRule = null)
     {
-        $this->comparator = $comparator;
+        $this->builder = $builder;
 
         $this->versionRule = $versionRule;
     }
@@ -59,8 +60,7 @@ class Hydrator implements HydratorProjectInterface
             }
             $versionsByPriority->insert($version);
         }
-        $addStableRule = new AddStableRule($versionsByPriority);
-        $addStableRule($this->comparator);
+        $this->builder->withStableVersion($versionsByPriority);
 
         if ($project instanceof Dependency) {
             $versionData = $versionsByPriority->current();
@@ -68,13 +68,13 @@ class Hydrator implements HydratorProjectInterface
             $project->setLatestVersion( new Version($versionData['version']) );
         }
 
+        $comparator = $this->builder->create();
         foreach ($versionsByPriority as $version) {
             $currentVersion = new Version($version['version']);
-            if (!$this->versionRule || $this->comparator->compare($currentVersion, $this->versionRule)) {
+            if (!$this->versionRule || $comparator->compare($currentVersion, $this->versionRule)) {
                 $project->setVersion($currentVersion);
 
-                $addSelfVersionRule = new AddSelfVersionRule($project);
-                $addSelfVersionRule($this->comparator);
+                $this->builder->withSelfVersion($project);
                 
                 return;
             }

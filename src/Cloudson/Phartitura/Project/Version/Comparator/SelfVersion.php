@@ -2,11 +2,11 @@
 
 namespace Cloudson\Phartitura\Project\Version\Comparator;
 
-use Cloudson\Phartitura\Project\Version\ComparatorStrategyInterface;
+use Cloudson\Phartitura\Project\Version\ComparatorInterface;
 use Cloudson\Phartitura\Project\Version\Version;
 use Cloudson\Phartitura\Project\Project;
 
-class SelfVersion implements ComparatorStrategyInterface
+class SelfVersion implements ComparatorInterface
 {
     private $project;
 
