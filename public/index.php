@@ -1,5 +1,6 @@
 <?php 
-error_reporting(E_ALL | E_STRICT);
+error_reporting(0);
+
 require __DIR__.'/../vendor/autoload.php';
 
 use Respect\Rest\Router; 
@@ -19,12 +20,6 @@ $app->get('/', function () use ($c){
         'latestProjects' => $service->getLatestProjectsList(),
         '_view' => 'home.html',
     ];
-});
-
-$app->get('/about', function(){
-   return [
-        '_view' => 'home.html',
-    ]; 
 });
 
 $app->get('/*/*/*', new PackageController($c));
