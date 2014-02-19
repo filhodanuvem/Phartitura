@@ -1,6 +1,8 @@
 Phartitura [![Build Status](https://travis-ci.org/cloudson/Phartitura.png)](https://travis-ci.org/cloudson/Phartitura)[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/cloudson/Phartitura/badges/quality-score.png?s=fd65510d7e5e13502575f78fdc0f69c58983e919)](https://scrutinizer-ci.com/g/cloudson/Phartitura/a)[![Code Coverage](https://scrutinizer-ci.com/g/cloudson/Phartitura/badges/coverage.png?s=265d0e6814ac8f3f3985698511a21ff89e84ee57)](https://scrutinizer-ci.com/g/cloudson/Phartitura/)
 ==================
 
+![Phartitura](./public/images/logo.png)
+
 ### At first, you could... 
 This project born only for fun! I'm an (ever) student, so, you could help me with source code, fixing bugs, improving new features or simply rewriting text in english (btw yet I'm not fluent, my humble apologies). 
 
