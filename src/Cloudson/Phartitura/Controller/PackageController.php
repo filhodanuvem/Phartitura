@@ -8,6 +8,7 @@ use Cloudson\Phartitura\Service\ProjectService;
 use Cloudson\Phartitura\Packagist\Renderer;
 use Cloudson\Phartitura\Project\Exception\ProjectNotFoundException;
 use Cloudson\Phartitura\Project\Exception\VersionNotFoundException;
+use Cloudson\Phartitura\Project\Exception\InvalidNameException; 
 
 class PackageController implements Routable
 {
@@ -30,7 +31,16 @@ class PackageController implements Routable
             return [
                 '_view' => 'project_404.html',
                 'name' => $e->getProjectName(),
-                'AProjectWasNotFound' => $e->getProjectName() == sprintf('%s/%s', $user, $packageName),
+                'label' => $e->getProjectName() == sprintf('%s/%s', $user, $packageName) ? 'project' : 'dependency',
+            ];
+        } catch (InvalidNameException $e) {
+            $this->container->monolog->notice($e->getMessage());
+            http_response_code(404);
+            $name = sprintf('%s/%s', $user, $packageName);
+            return [
+                '_view' => 'project_404.html',
+                'name' => $name,
+                'label' => 'page',
             ];
         } catch (VersionNotFoundException $e) {
             $this->container->monolog->error($e->getMessage());

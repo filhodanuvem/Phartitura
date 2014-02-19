@@ -7,7 +7,7 @@
         <img src="/images/elephant_confused.png">
         <div id='alert-404' class='alert-warning'>
             <h2>404</h2>
-            <h4>The {% if AProjectWasNotFound %} project {% else %} dependency {% endif %}'{{ name }}' was not found in Packagist. </h4><br>
+            <h4>The {{ label|default('project') }} '{{ name }}' was not found in Packagist. </h4><br>
             <a href='/'>Back to home</a> listening Mozart! <br>
             <small>Or <a href="https://github.com/cloudson/Phartitura/issues/new" >report a bug</a></small>
         </div>    
