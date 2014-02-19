@@ -31,11 +31,13 @@ class RedisAdapter implements CacheAdapterInterface
         return $this->client->exists($projectName);
     }
 
-    public function saveProject($projectName, $json)
+    public function saveProject($projectName, $json, $onDisk = false)
     {
         $this->client->set($projectName, $json);
         $this->client->setTimeout($projectName, $this->defaultTimeout);
-        $this->client->save();
+        if ($onDisk) {
+            $this->client->save();
+        }
     }
 
     public function saveView($projectName)
