@@ -106,14 +106,4 @@ class Hydrator implements HydratorProjectInterface
     {
         return $this->versionRule;
     }
-
-    public function getComparator()
-    {
-        return $this->comparator;
-    }
-
-    public function setComparator(Comparator $comprator)
-    {
-        $this->comparato = $comparator;
-    }
 }

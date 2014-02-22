@@ -19,19 +19,15 @@ class TildeVersion implements ComparatorInterface
 
         $converted = $this->convertToRange($versionRule);
 
-        $tildeVersion = new RangeVersion;
+        $rangeVersion = new RangeVersion;
         
-        return $tildeVersion->compare($versionCurrent, $converted);
+        return $rangeVersion->compare($versionCurrent, $converted);
     }
 
     public function convertToRange($versionRule)
     {
         $matches = array();
         preg_match_all(self::PATTERN, $versionRule, $matches);
-
-        if (count($matches[0]) == 0) {
-
-        }
 
         $rule  = $matches[1][0];
         $major = $matches[2][0]; 

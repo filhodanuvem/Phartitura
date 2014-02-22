@@ -52,15 +52,13 @@ class RangeVersion implements ComparatorInterface
 
         $lexemes = $this->parse($versionRule);
 
-        if (array_key_exists($lexemes[0], static::$compareMethods)) {
-
-        }
         $boolOperator = $lexemes[2];
         unset($lexemes[2]);
         $lexemes = array_chunk($lexemes, 4)[0];
+        $lexemesLength = count($lexemes);
 
         $result = true;
-        for ($i = 0; $i < count($lexemes); $i += 2) {
+        for ($i = 0; $i < $lexemesLength; $i += 2) {
             $mathOperator = $lexemes[$i];
             if (!$mathOperator) {
                 continue;

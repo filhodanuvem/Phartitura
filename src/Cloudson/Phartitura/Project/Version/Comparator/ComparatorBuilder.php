@@ -18,7 +18,7 @@ class ComparatorBuilder
 
     private $comparator = null; 
 
-    public function __call($methodName, $args)
+    public function __call($methodName, $args = [])
     {
         if (false === preg_match('/^with/', $methodName)) {
             throw new \UnexpectedValueException(sprintf(

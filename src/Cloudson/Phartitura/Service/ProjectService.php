@@ -10,6 +10,13 @@ use Guzzle\Http\Client as Guzzle;
 use Cloudson\Phartitura\Curl\GuzzleAdapter;
 use Cloudson\Phartitura\Cache\RedisAdapter;
 
+/**
+* @method withExactVersion()
+* @method withRangeVersion()
+* @method withTildeVersion()
+* @method WildCardVersion()
+* 
+*/ 
 class ProjectService 
 {
 
@@ -24,8 +31,6 @@ class ProjectService
         
         $builder = new ComparatorBuilder;
         $builder->withExactVersion()->withRangeVersion()->withTildeVersion()->WildCardVersion();
-
-        $hydrator = new Hydrator($builder, 'undefined');
 
         $g = new Guzzle('http://'.Client::BASE);
         
