@@ -25,7 +25,7 @@ class ProjectService
         $builder = new ComparatorBuilder;
         $builder->withExactVersion()->withRangeVersion()->withTildeVersion()->WildCardVersion();
 
-        $hydrator = new Hydrator($builder, '6.6.6');
+        $hydrator = new Hydrator($builder, 'undefined');
 
         $g = new Guzzle('http://'.Client::BASE);
         
@@ -55,7 +55,9 @@ class ProjectService
 
     public function getLatestProjectsList()
     {
-        return $this->cacheClient->getViews();
+        $limit = $this->cacheClient->getLatestProjectsListLimit();
+        
+        return array_slice($this->cacheClient->getViews(), 0, $limit);
     }
 
 }

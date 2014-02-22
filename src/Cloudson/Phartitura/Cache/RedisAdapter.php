@@ -40,17 +40,18 @@ class RedisAdapter implements CacheAdapterInterface
         }
     }
 
+    public function getLatestProjectsListLimit()
+    {
+        return $this->latestProjectsListLimit;
+    }
+
     public function saveView($projectName)
     {
-        $list = $this->getViews();
-        if (false !== array_search($projectName, $list)) {
-            $this->client->lrem(self::LIST_LATEST_PROJECTS, $projectName, -1);
-        }
-        $this->client->lpush(self::LIST_LATEST_PROJECTS, $projectName);
+        $this->client->sAdd(self::LIST_LATEST_PROJECTS, $projectName);
     }
 
     public function getViews()
     {
-        return $this->client->lrange(self::LIST_LATEST_PROJECTS, 0 , $this->latestProjectsListLimit - 1);
+        return $this->client->sMembers(self::LIST_LATEST_PROJECTS);
     }
 }
