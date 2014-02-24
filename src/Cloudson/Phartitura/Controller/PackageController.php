@@ -43,11 +43,13 @@ class PackageController implements Routable
                 'label' => 'page',
             ];
         } catch (VersionNotFoundException $e) {
+            http_response_code(502);
             $this->container->monolog->error($e->getMessage());
             return [
                 '_view' => '500.html',
             ];
         } catch (\Exception $e) {
+            http_response_code(500);
             $this->container->monolog->error($e->getMessage());
             return [
                 '_view' => '500.html',
