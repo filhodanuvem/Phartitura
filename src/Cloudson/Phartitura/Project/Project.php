@@ -19,6 +19,8 @@ class Project implements \IteratorAggregate, \Countable, \JsonSerializable
 
     private $description;
 
+    private $source;
+
     public function __construct($name, Version $version)
     {
         $this->setName($name);
@@ -99,6 +101,21 @@ class Project implements \IteratorAggregate, \Countable, \JsonSerializable
             }
         }
         return null;
+    }
+
+    public function setSource($source) 
+    {
+        $this->source = $source;
+    }
+
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    public function getSourceWithoutExtension()
+    {
+        return str_replace('.git', '', $this->source);
     }
 
     public function getIterator()

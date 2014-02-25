@@ -73,6 +73,7 @@ class Hydrator implements HydratorProjectInterface
             $currentVersion = new Version($version['version']);
             if (!$this->versionRule || $comparator->compare($currentVersion, $this->versionRule)) {
                 $project->setVersion($currentVersion);
+                $project->setSource($version['source']['url']);
 
                 $this->builder->withSelfVersion($project);
                 

@@ -4,7 +4,7 @@
 
 {% block main %}
     <div id="project_table">
-        <h2 id='project_name'><small><a href='/' title='back to home'><i class='glyphicon glyphicon-chevron-left'></i></a></small>{{ project.nameCamelCase }} <small id='project_version'>{{ project.version }}</small></h2>
+        <h2 id='project_name'><small><a href='/' title='back to home'><i class='glyphicon glyphicon-chevron-left'></i></a></small>{{ project.nameCamelCase }} <small id='project_version'>{{ project.version }}</small>  <a href="{{ project.sourceWithoutExtension }}" title='Go to the Github'><img src="/images/github.png" width="16px"></a></h2>
         <div id='project_description'>{{ project.description }}</div>
         <br>
         <table class="table table-condensed " id='dependencies'>
