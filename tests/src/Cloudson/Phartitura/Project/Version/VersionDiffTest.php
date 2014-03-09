@@ -24,4 +24,26 @@ class VersionDiffTest extends \PHPUnit_Framework_TestCase
         ],  iterator_to_array($versionDiff->getIterator()));
     }
 
+    /**
+    * @test
+    * @dataProvider provider_equals_versions
+    */ 
+    public function should_be_callable($versionString1, $versionString2)
+    {
+        $version1 = new Version($versionString1);
+        $version2 = new Version($versionString2);
+
+        $versionDiff = new VersionDiff();
+        
+        $this->assertFalse($versionDiff($version1, $version2)); 
+    }
+
+    public function provider_equals_versions()
+    {
+        return [
+            ['1.0.0', '1.0.0  '],
+            ['2.3.0', '2.3.0']
+        ];
+    }
+
 }
