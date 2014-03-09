@@ -10,6 +10,7 @@ use Cloudson\Phartitura\Routine\Twig as TwigRoutine;
 use Cloudson\Phartitura\Routine\Json as JsonRoutine;
 use Cloudson\Phartitura\Service\ProjectService;
 use Cloudson\Phartitura\Project\Version\VersionDiff;
+use Cloudson\Phartitura\Controller;
 
 $c = new Container(__DIR__.'/../config/parameters.ini');
 
@@ -27,16 +28,8 @@ $app->get('/', function () use ($c) {
     ];
 });
 
-$app->get('/*/*.json', function($user, $package) use ($c){
-    $caller = PackageController::getActionCaller($c);
-    $data = $caller($user, $package);
-    header('Content-type: application/json');
-
-    return (new JsonRoutine)->__invoke($data);
-});
-
 $app->get('/*/*.png', function($user, $package) use($c) {
-    $caller = PackageController::getActionCaller($c);
+    $caller = Controller\Package::get($c);
     $data = $caller($user, $package);
 
     $versiondiff = new VersionDiff;
@@ -45,14 +38,21 @@ $app->get('/*/*.png', function($user, $package) use($c) {
     foreach ($dependencies as $dependency) {
         if ($versiondiff($dependency->getLatestVersion(), $dependency->getVersion())) {
             $image = '/images/statusnotok.png';
+            break;
         }
     }
-    
     header('Content-type: image/png');
 
     return readfile(__DIR__.$image);
 });
 
-$app->get('/*/*/*', new PackageController($c))->accept($contentNegotiation);
+$app->get('/*/*.json', function($user, $package) use ($c){
+    $caller =  Controller\Package::get($c);
+    $data = $caller($user, $package);
+    header('Content-type: application/json');
+
+    return (new JsonRoutine)->__invoke($data);
+});
+$app->get('/*/*/*', Controller\Package::get($c))->accept($contentNegotiation);
 
 print $app->run();
