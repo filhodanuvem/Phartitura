@@ -1,5 +1,5 @@
 <?php 
-error_reporting(0);
+error_reporting(E_ALL|E_STRICT);
 
 require __DIR__.'/../vendor/autoload.php';
 
@@ -13,8 +13,12 @@ use Cloudson\Phartitura\Service\ProjectService;
 $c = new Container(__DIR__.'/../config/parameters.ini');
 
 $app = new Router;
+$contentNegotiation = [
+    'application/json' => new JsonRoutine,
+    'text/html' => (new TwigRoutine($c->twig))->addGlobalVar('current_url', $_SERVER['REQUEST_URI']),
+];
 
-$app->get('/', function () use ($c){
+$app->get('/', function () use ($c) {
     $service = new ProjectService($c->redisAdapter);
     return [
         'latestProjects' => $service->getLatestProjectsList(),
@@ -22,14 +26,14 @@ $app->get('/', function () use ($c){
     ];
 });
 
-$app->get('/*/*/*', new PackageController($c));
+$a = $app->get('/*/*.json', function($user, $package) use ($c){
+    $caller = PackageController::getActionCaller($c);
+    $data = $caller($user, $package);
+    header('Content-type: application/json');
 
-$app->always(
-    'Accept',
-    [
-        'text/html' => (new TwigRoutine($c->twig))->addGlobalVar('current_url', $_SERVER['REQUEST_URI']),
-        'application/json' => new JsonRoutine,
-    ]
-);
+    return (new JsonRoutine)->__invoke($data);
+});
+
+$app->get('/*/*/*', new PackageController($c))->accept($contentNegotiation);
 
 print $app->run();
