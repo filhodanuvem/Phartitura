@@ -5,7 +5,7 @@
 {% block main %}
     <div id="project_table">
         <h2 id='project_name'><small><a href='/' title='back to home'><i class='glyphicon glyphicon-chevron-left'></i></a></small>{{ project.nameCamelCase }} <small id='project_version'>{{ project.version }}</small>  
-          <img src="/{{ project.name}}.png" width='95px'>
+          <img src="/{{ project.name}}/{{ project.version.slugfy }}.png" width='95px'>
           </h2>
         <div id='project_description'>
           {{ project.description }}

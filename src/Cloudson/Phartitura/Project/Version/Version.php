@@ -60,6 +60,11 @@ class Version
         $this->createdAt = $createdAt;
     }
 
+    public function getSlugfy()
+    {   
+        return str_replace('.', '-', $this->valueString);
+    }
+
     public function __toString()
     {
         return $this->valueString;

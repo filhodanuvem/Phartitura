@@ -14,8 +14,9 @@ class Package
         $function = null;
         switch ($name) {
             case 'get': 
-                $function = function ($user, $packageName, $version =null) use ($args){
+                $function = function ($user, $packageName, $version = null) use ($args){
                     $container = $args[0];
+                    $version = is_array($version) ? $version[0] : $version;
                     $service = new ProjectService($container->redisAdapter);
                     try {
                         $project = $service->getProject($user, $packageName, str_replace('-', '.', $version));

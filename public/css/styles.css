@@ -48,6 +48,11 @@ a:hover {
     margin-bottom: 3px;
 }
 
+.home-projects-example pre img {
+    position: absolute;
+    right: 30px;
+}
+
 .header {
     border-bottom: 1px solid #ccc;
     margin-bottom: 30px;

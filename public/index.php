@@ -26,11 +26,11 @@ $app->get('/', function () use ($c) {
         'latestProjects' => $service->getLatestProjectsList(),
         '_view' => 'home.html',
     ];
-});
+})->accept($contentNegotiation);
 
-$app->get('/*/*.png', function($user, $package) use($c) {
+$badgeCallback = function($user, $package, $version=null) use($c) {
     $caller = Controller\Package::get($c);
-    $data = $caller($user, $package);
+    $data = $caller($user, $package, $version);
 
     $versiondiff = new VersionDiff;
     $dependencies = $data['project']->getDependencies();
@@ -44,15 +44,21 @@ $app->get('/*/*.png', function($user, $package) use($c) {
     header('Content-type: image/png');
 
     return readfile(__DIR__.$image);
-});
+};
+$app->get('/*/*.png', $badgeCallback);
+$app->get('/*/*/*.png', $badgeCallback);
 
-$app->get('/*/*.json', function($user, $package) use ($c){
+$jsonCallback = function($user, $package, $version=null) use ($c){
     $caller =  Controller\Package::get($c);
-    $data = $caller($user, $package);
+    $data = $caller($user, $package, $version);
     header('Content-type: application/json');
 
     return (new JsonRoutine)->__invoke($data);
-});
-$app->get('/*/*/*', Controller\Package::get($c))->accept($contentNegotiation);
+};
+
+$app->get('/*/*.json', $jsonCallback);
+$app->get('/*/*/*.json', $jsonCallback);
+
+$app->get('/*/*/**', Controller\Package::get($c))->accept($contentNegotiation);
 
 print $app->run();
