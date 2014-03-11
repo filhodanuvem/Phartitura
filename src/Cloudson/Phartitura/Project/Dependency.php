@@ -29,4 +29,22 @@ class Dependency extends Project
     {
         return $this->latestVersion; 
     }
+
+    public function isUpToDate()
+    {
+        return (string)$this->getLatestVersion() === (string)$this->getVersion();
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'rule' => $this->getVersionRule(),
+            'version' => (string) $this->getVersion(),
+            'isUpToDate' => $this->isUpToDate(), 
+            'latestVersion' => (string) $this->getLatestVersion(),
+            'dependencies' => iterator_to_array($this->getDependencies()),
+        ];
+    } 
 }
