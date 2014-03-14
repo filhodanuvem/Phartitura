@@ -11,8 +11,16 @@ use Cloudson\Phartitura\Routine\Json as JsonRoutine;
 use Cloudson\Phartitura\Service\ProjectService;
 use Cloudson\Phartitura\Project\Version\VersionDiff;
 use Cloudson\Phartitura\Controller;
+use Cloudson\Phartitura\Packagist\Client;
+use Guzzle\Http\Client as Guzzle; 
+use Cloudson\Phartitura\Curl\GuzzleAdapter;
 
 $c = new Container(__DIR__.'/../config/parameters.ini');
+$c->clientCurl = function() use($c) {
+    $g = new Guzzle('http://'.Client::BASE);        
+    return new GuzzleAdapter($g);
+}; 
+
 
 $app = new Router;
 $contentNegotiation = [
@@ -21,7 +29,7 @@ $contentNegotiation = [
 ];
 
 $app->get('/', function () use ($c) {
-    $service = new ProjectService($c->redisAdapter);
+    $service = new ProjectService($c->clientCurl, $c->redisAdapter);
     return [
         'latestProjects' => $service->getLatestProjectsList(),
         '_view' => 'home.html',
@@ -45,6 +53,12 @@ $badgeCallback = function($user, $package, $version=null) use($c) {
 
     return readfile(__DIR__.$image);
 };
+$app->get('/private', function(){
+    return [
+        '_view' => 'private.html',
+    ];
+})->accept($contentNegotiation);
+
 $app->get('/*/*.png', $badgeCallback);
 $app->get('/*/*/*.png', $badgeCallback);
 

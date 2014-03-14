@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block title %} Private analysis {% endblock %}
+
+{% block main %}
+<form method="post" action="">
+    <label>Suba seu composer.json</label>
+    <input name='composer_file' type='file'>
+    <textarea name='composer_raw' rows="20" width="100%"></textarea> 
+    <input type='submit' class='btn btn-default' value='Analise'> 
+</form>
+{% endblock %}

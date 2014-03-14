@@ -15,7 +15,7 @@
             <div class="header">
                 <ul class="nav nav-pills pull-right hidden-xs">
                   <li {% if _current_url == '/' or _current_url == '' %}class="active"{% endif %}><a href="/">Home</a></li>
-                  {# <li><a href="http://github.com/cloudson/phartitura" target="_blank">Github</a></li> #}
+                  <li {% if _current_url == '/private' %}class="active"{% endif %}><a href="/private">Private</a></li>
                   <li {% if _current_url == '/about' %}class="active"{% endif %}><a href="https://github.com/cloudson/Phartitura/blob/master/README.md">About</a></li>
                 </ul>
 
