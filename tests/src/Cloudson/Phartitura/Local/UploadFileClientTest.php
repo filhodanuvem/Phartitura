@@ -1,8 +1,10 @@
 <?php
 
-namespace Cloudson\Phartitura\Packagist;
+namespace Cloudson\Phartitura\Local;
 
-class UploadClientTest extends \PHPUnit_Framework_TestCase
+use Cloudson\Phartitura\Packagist\JsonConverter;
+
+class UploadFileClientTest extends \PHPUnit_Framework_TestCase
 {
     /**
     * @test
@@ -15,9 +17,9 @@ class UploadClientTest extends \PHPUnit_Framework_TestCase
         file_put_contents($name, $json);
         $file = new \SplFileInfo($name);
 
-        $client = new UploadClient(new JsonConverter);
+        $client = new UploadFileClient(new JsonConverter);
         $client->setFile($file);
-        $client->getProject('');
+        $client->get('');
         unlink($name);
     }
 
@@ -44,9 +46,9 @@ JSON;
         file_put_contents($name, $json);
         $file = new \SplFileInfo($name);
 
-        $client = new UploadClient(new JsonConverter);
+        $client = new UploadFileClient(new JsonConverter);
         $client->setFile($file);
-        $project = $client->getProject('');
+        $project = $client->get('');
         unlink($name);
 
         $expected = [

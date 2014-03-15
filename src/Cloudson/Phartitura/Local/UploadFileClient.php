@@ -1,10 +1,11 @@
 <?php
 
-namespace Cloudson\Phartitura\Packagist;
+namespace Cloudson\Phartitura\Local;
 
-use Cloudson\Phartitura\ClientProjectInterface;
+use Cloudson\Phartitura\Curl\ClientAdapter;
+use Cloudson\Phartitura\Packagist\JsonConverter;
 
-class UploadClient implements ClientProjectInterface
+class UploadFileClient implements ClientAdapter
 {
 
     private $converter;
@@ -22,15 +23,13 @@ class UploadClient implements ClientProjectInterface
         $this->file = $file;
     }
 
-    public function ping($projectName)
-    {
-        return 200;
-    }
+    public function head($relativeURI){}
+    public function setSecure($isSecure){}
 
-    public function getProject($name)
+    public function get($relativeURI)
     {
         $content = file_get_contents((string)$this->file);
-        
+
         return $this->converter->convert($content);
     }
 }
