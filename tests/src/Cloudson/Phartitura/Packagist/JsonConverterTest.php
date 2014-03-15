@@ -46,7 +46,8 @@ JSON;
             'description' => 'blah!',
         ]; 
 
-        $this->assertEquals($expected, $found);
+        $this->assertEquals($expected['name'], $found['name']);
+        $this->assertEquals($expected['description'], $found['description']);
     }
 
     /** 
@@ -68,4 +69,129 @@ JSON;
             ['{ "name": foo ']
         ];
     }
+
+    /** 
+    *  @test
+    */
+    public function should_set_devmaster_without_version()
+    {
+        $json = <<<JSON
+{
+    "name" : "foo/bar",
+    "description" : "blah!",
+    "dependencies": []
+}
+JSON;
+        $converter = new JsonConverter;
+        $found = $converter->convert($json);
+        $expected = 'dev-master';
+
+        $this->assertEquals($expected, $found['versions']['dev-master']['version']);
+    }
+
+
+    /**
+    * @test
+    */ 
+    public function should_set_version_correctly()
+    {
+        $json = <<<JSON
+{
+    "name" : "foo/bar",
+    "description" : "blah!",
+    "version" : "2.1.0"
+}
+JSON;
+
+        $converter = new JsonConverter;
+        $found = $converter->convert($json);
+        $expected = "2.1.0";
+
+        $this->assertEquals($expected, $found['versions']["2.1.0"]['version']);
+        $this->assertEquals(1, count($found['versions']));
+    }
+
+    /**
+    * @test
+    */ 
+    public function should_use_require()
+    {
+        $json = <<<JSON
+{
+    "name" : "foo/bar",
+    "description" : "blah!",
+    "require": {
+        "bar/baz": "2.1.0"
+    }
+}        
+JSON;
+        $converter = new JsonConverter;
+        $found = $converter->convert($json);
+        $expected = [
+            "bar/baz" => "2.1.0"
+        ];
+
+        $this->assertEquals($expected, $found['versions']['dev-master']['require']);
+    }
+
+    /**
+    * @test
+    */ 
+    public function should_use_require_and_replace()
+    {
+        $json = <<<JSON
+{
+    "name" : "foo/bar",
+    "description" : "blah!",
+    "require": {
+        "bar/baz": "2.1.0"
+    },
+    "replace" : {
+        "cloudson/gandalf":"self.version"
+    }
+}        
+JSON;
+        $converter = new JsonConverter;
+        $found = $converter->convert($json);
+        $expectedRequire = [
+            "bar/baz" => "2.1.0"
+        ];
+        $expectedReplace = [
+            "cloudson/gandalf" => "self.version"
+        ];
+
+        $this->assertEquals($expectedRequire, $found['versions']['dev-master']['require']);
+        $this->assertEquals($expectedReplace, $found['versions']['dev-master']['replace']);
+    }
+
+
+    /**
+    * @test
+    */ 
+    public function should_always_set_timestamp()
+    {
+        $json = <<<JSON
+{
+    "name" : "foo/bar",
+    "description" : "blah!",
+    "require": {
+        "bar/baz": "2.1.0"
+    }
+}
+JSON;
+        $converter = new JsonConverter;
+        $found = $converter->convert($json);   
+        
+        $this->assertNotNull($found['versions']['dev-master']['time']);
+
+    }
+
+//     $json = <<<JSON
+// {
+//     "name" : "foo/bar",
+//     "description" : "blah!",
+//     "dependencies": [
+//         "bar/baz": "2.1.0"
+//     ]
+// }
 }
