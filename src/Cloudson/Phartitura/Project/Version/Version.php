@@ -12,8 +12,7 @@ class Version
 
     public function __construct($valueString, \DateTime $createdAt = null)
     {
-        $this->valueString = str_replace(' ', '', $valueString);
-        $this->valueString = preg_replace('/^v(.*)/', '$1', $this->valueString);
+        $this->valueString = static::purify($valueString);
         if ($createdAt) {
             $this->setCreatedAt($createdAt);
         }
@@ -68,6 +67,12 @@ class Version
     public function __toString()
     {
         return $this->valueString;
+    }
+
+    public static function purify($valueString)
+    {
+        $valueString = str_replace(' ', '', $valueString);
+        return preg_replace('/^v(.*)/', '$1', $valueString);
     }
     
 }

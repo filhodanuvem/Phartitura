@@ -13,7 +13,7 @@ class ExactVersionTest extends \PHPUnit_Framework_TestCase
     public function should_check_that_two_versions_are_equals($vs1, $vs2)
     {
         $v1 = new Version($vs1);
-        $v2 = new Version($vs2);
+        $v2 = $vs2;
 
         $comparator = new ExactVersion;
 
@@ -27,8 +27,8 @@ class ExactVersionTest extends \PHPUnit_Framework_TestCase
     public function  should_check_that_two_versions_are_not_equals($vs1, $vs2)
     {
         $v1 = new Version($vs1);
-        $v2 = new Version($vs2);
-
+        $v2 = $vs2;
+        
         $comparator = new ExactVersion;
 
         $this->assertFalse($comparator->compare($v1, $v2));
@@ -39,6 +39,8 @@ class ExactVersionTest extends \PHPUnit_Framework_TestCase
         return [
             ['1.0.0', ' 1.0.0'],
             ['2.3.0 ', ' 2.3.0'],
+            ['v2.3.0', '2.3.0'],
+            ['2.3.0', 'v2.3.0']
         ];
     }
 
