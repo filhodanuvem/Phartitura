@@ -142,4 +142,22 @@ class RangeVersionTest extends \PHPUnit_Framework_TestCase
             [new Version('5.6.2'), '<5.7 | >5.8']
         ];
     }
+
+    /** 
+    * @test
+    * @dataProvider getVersionNotRangeRule
+    */ 
+    public function should_not_match($version, $rule)
+    {
+        $comparator = new RangeVersion;
+        
+        $this->assertFalse($comparator->compare($version, $rule));
+    }
+
+    public function getVersionNotRangeRule()
+    {
+        return [
+            [new Version('5.2'), '5.2'],
+        ];
+    }
 }

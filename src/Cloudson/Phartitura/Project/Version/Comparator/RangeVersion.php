@@ -30,9 +30,6 @@ class RangeVersion implements ComparatorInterface
     {
         $matches = array();
         preg_match_all(self::PATTERN, $source, $matches);
-        if (!$matches || !$matches[0]) {
-            return array();
-        }
 
         return [
             $matches[1][0],  

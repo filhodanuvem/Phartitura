@@ -57,4 +57,35 @@ class VersionTest extends \PHPUnit_Framework_TestCase
             ['v1.300.3', '1', 300 , 3],
         ];
     }
+
+    /**
+    * @test
+    * @dataProvider provide_slugfies
+    */ 
+    public function should_slugfy($versionString, $expected)
+    {
+        $version = new Version($versionString);
+
+        $this->assertEquals($expected, $version->getSlugfy());
+    }
+
+    public function provide_slugfies()
+    {
+        return [
+            ['1.40.0', '1-40-0'],
+            ['2.0.0a', '2-0-0a'],
+            // ['3.0.5-alpha8', '3-0-5-alpha8']
+        ];
+    }
+
+    /**
+    * @test
+    * @expectedException \OutOfRangeException
+    */ 
+    public function should_avoid_versions_in_future()
+    {
+        $version = new Version('1.0.0');
+
+        $version->setCreatedAt(new \DateTime('tomorrow'));
+    }
 }

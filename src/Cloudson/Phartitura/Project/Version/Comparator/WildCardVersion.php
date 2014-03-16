@@ -10,9 +10,9 @@ class WildCardVersion implements ComparatorInterface
 
     public function compare(Version $versionCurrent, $versionRule)
     {
-        if (!$versionCurrent->isSemver()) {
-            return false;
-        }
+        // if (!$versionCurrent->isSemver()) {
+        //     return false;
+        // }
 
 
         if ('*' === trim($versionRule)) {
