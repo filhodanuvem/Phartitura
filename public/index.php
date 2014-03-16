@@ -14,6 +14,9 @@ use Cloudson\Phartitura\Controller;
 use Cloudson\Phartitura\Packagist\Client;
 use Guzzle\Http\Client as Guzzle; 
 use Cloudson\Phartitura\Curl\GuzzleAdapter;
+use Cloudson\Phartitura\Local\UploadFileClient;
+use Cloudson\Phartitura\Packagist\JsonConverter;
+
 
 $c = new Container(__DIR__.'/../config/parameters.ini');
 $c->clientCurl = function() use($c) {
@@ -53,7 +56,27 @@ $badgeCallback = function($user, $package, $version=null) use($c) {
 
     return readfile(__DIR__.$image);
 };
-$app->get('/private', function(){
+$app->any('/private', function() use ($c){
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $composerRaw = $_POST['composer_raw'];
+        $fileName = tempnam(sys_get_temp_dir(), 'composer_phart');
+        file_put_contents($fileName, $composerRaw);
+        $file = new \SplFileInfo($fileName);
+
+        $guzzleAdapter = $c->clientCurl;
+        $c->clientCurl = function () use ($file, $guzzleAdapter){
+            $client = new UploadFileClient(new JsonConverter);
+            $client->setFile($file);
+            $client->setSubClient($guzzleAdapter);
+
+            return $client;
+        };
+        $caller =  Controller\Package::get($c);
+        $data = $caller(UploadFileClient::getLocalUser($composerRaw), UploadFileClient::getLocalName($composerRaw));
+
+        return $data + ['_view' => 'private.html'];
+    }
+
     return [
         '_view' => 'private.html',
     ];

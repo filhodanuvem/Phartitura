@@ -40,7 +40,7 @@ class JsonConverterTest extends \PHPUnit_Framework_TestCase
 }
 JSON;
         $converter = new JsonConverter;
-        $found = $converter->convert($composerjson);
+        $found = json_decode($converter->convert($composerjson),true)["package"];
         $expected = [
             'name' => 'cloudson/Gandalf',
             'description' => 'blah!',
@@ -83,7 +83,7 @@ JSON;
 }
 JSON;
         $converter = new JsonConverter;
-        $found = $converter->convert($json);
+        $found = json_decode($converter->convert($json),true)["package"];
         $expected = 'dev-master';
 
         $this->assertEquals($expected, $found['versions']['dev-master']['version']);
@@ -104,7 +104,7 @@ JSON;
 JSON;
 
         $converter = new JsonConverter;
-        $found = $converter->convert($json);
+        $found = json_decode($converter->convert($json),true)["package"];
         $expected = "2.1.0";
 
         $this->assertEquals($expected, $found['versions']["2.1.0"]['version']);
@@ -126,7 +126,7 @@ JSON;
 }        
 JSON;
         $converter = new JsonConverter;
-        $found = $converter->convert($json);
+        $found = json_decode($converter->convert($json),true)["package"];
         $expected = [
             "bar/baz" => "2.1.0"
         ];
@@ -152,7 +152,7 @@ JSON;
 }        
 JSON;
         $converter = new JsonConverter;
-        $found = $converter->convert($json);
+        $found = json_decode($converter->convert($json),true)["package"];
         $expectedRequire = [
             "bar/baz" => "2.1.0"
         ];
@@ -180,18 +180,9 @@ JSON;
 }
 JSON;
         $converter = new JsonConverter;
-        $found = $converter->convert($json);   
+        $found = json_decode($converter->convert($json),true)["package"];
         
         $this->assertNotNull($found['versions']['dev-master']['time']);
 
     }
-
-//     $json = <<<JSON
-// {
-//     "name" : "foo/bar",
-//     "description" : "blah!",
-//     "dependencies": [
-//         "bar/baz": "2.1.0"
-//     ]
-// }
 }

@@ -76,7 +76,7 @@ class Client implements ClientProjectInterface
     public function getProject($name, $versionRulestring = null, $recursive = true)
     {
         $p = new Project($name, new Version('0.0.0'));
-        $json = $this->cache->getProject($name);
+        $json = null; //$this->cache->getProject($name);
         if (null === $json) {
             $this->ping($name);
             try {
@@ -95,7 +95,7 @@ class Client implements ClientProjectInterface
     public function getDependency($name, $versionRulestring = null, $recursive = true)
     {
         $d = new Dependency($name, new Version('0.0.0'));
-        $json = $this->cache->getProject($name);
+        $json = null;//$this->cache->getProject($name);
         if (null === $json) {
             $this->ping($name);
             try {
@@ -116,7 +116,6 @@ class Client implements ClientProjectInterface
     {
         $this->hydrator->setVersionRule($versionRulestring);
         $json = json_decode($json, true)?: [];
-
         $this->hydrator->hydrate($json, $p);    
 
         $requireJson = $this->getDependenciesFromVersionProject($json, $p->getVersion(), 'require');

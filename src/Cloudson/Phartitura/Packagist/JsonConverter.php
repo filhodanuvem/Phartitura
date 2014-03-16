@@ -27,12 +27,13 @@ class JsonConverter
             throw new \InvalidArgumentException("Expected a json not empty");
         }
 
-
-        return [
-            "name" => $data['name'],
-            "description" => $data['description'],
-            "versions" => $this->getVersion($data),
-        ];
+        return json_encode([
+            "package" => [
+                "name" => $data['name'],
+                "description" => $data['description'],
+                "versions" => $this->getVersion($data),
+            ]
+        ]);
     }
 
     private function getVersion($data)
